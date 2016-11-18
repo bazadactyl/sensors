@@ -13,11 +13,12 @@
     </header>
 
     <div id="fields">
-      <form>
+      <form id="num_of_sensor_form">
         <span> # of sensors </span>
         <input type="number" name="num_of_sensors" min ="0"/>
         </br>
-        <input type="submit" name="submit"/>
+        <input type="submit" name="start" onclick="startSimulation()"/>
+        <input type="reset" name="reset" onclick="resetSimulation()"/>
       </form>
     </div>
 
