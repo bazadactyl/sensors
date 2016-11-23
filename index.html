@@ -13,13 +13,15 @@
     </header>
 
     <div id="fields">
-      <form id="num_of_sensor_form">
+        <span> unit interval </span>
+        <input type="number" id="unit_interval" min ="0"/></br>
+        <span>radius of nodes</span>
+        <input type="number" id="radius" min ="0"/> </br>
         <span> # of sensors </span>
-        <input type="number" name="num_of_sensors" min ="0"/>
+        <input type="number" id="num_of_sensors" min ="0"/> </br>
         </br>
-        <input type="submit" name="start" onclick="startSimulation()"/>
-        <input type="reset" name="reset" onclick="resetSimulation()"/>
-      </form>
+        <button  name="start" onclick="runSimulation()"> Start </button>
+        <button  name="reset" onclick="resetSimulation()"> Reset </button>
     </div>
 
     <div id="graphic"> </div>
