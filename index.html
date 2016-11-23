@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sensors COMP3203 - A2</title>
+      <script src="http://d3js.org/d3.v3.min.js" charset="utf-8" type="text/javascript"></script>
+     <script type="text/javascript" src="js/sensors.js"></script>
+
+  </head>
+  <body>
+    <header id="header">
+      <h1> Sensors: Assignment 2 - COMP3203 </h1>
+      <h3> Developed By: Alex, Basim, Chris </h3>
+    </header>
+
+    <div id="fields">
+        <span> unit interval </span>
+        <input type="number" id="unit_interval" min ="0"/></br>
+        <span>radius of nodes</span>
+        <input type="number" id="radius" min ="0"/> </br>
+        <span> # of sensors </span>
+        <input type="number" id="num_of_sensors" min ="0"/> </br>
+        </br>
+        <button  name="start" onclick="runSimulation()"> Start </button>
+        <button  name="reset" onclick="resetSimulation()"> Reset </button>
+    </div>
+
+    <div id="graphic"> </div>
+
+  </body>
+</html>
