@@ -26,11 +26,14 @@ var runSimulation = function() {
     var randomStartPosition = Math.random() * unitInterval;
     nodes[i] = new node(radius, randomStartPosition);
   }
+
+  
   runAlgorithm(nodes, unitInterval);
 }
 
 
 var runAlgorithm = function(nodes, interval) {
+  // render graphic
   //start the algo
 
 }
