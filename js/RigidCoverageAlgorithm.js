@@ -25,7 +25,7 @@ var rigidCoverageAlgorithm = {
     });
 
     doCoverage(nodeList, view);
-  }
+  },
 
   /**
    * Performs the rigid coverage placement on the
@@ -42,7 +42,7 @@ var rigidCoverageAlgorithm = {
   doCoverage : function (nodeList, view) {
     this.placeFirstNode(nodeList[0]);
     this.coverageIteration(nodeList, view, 1);
-  }
+  },
 
   coverageIteration : function(nodeList, view, currentNode) {
     var previousNode = nodeList[currentNode - 1];
@@ -69,7 +69,7 @@ var rigidCoverageAlgorithm = {
         this.coverageIteration(nodeList, view, currentNode++);
       }, 1000);
     }
-  }
+  },
 
   /**
    * Places the first node at radius distance away from
