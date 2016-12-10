@@ -10,7 +10,7 @@
  * @author Chris Ermel
  */
 var rigidCoverageAlgorithm = {
-
+  
   /**
    * Executes the rigidCoverageAlgorithm on the input nodeList.
    *
