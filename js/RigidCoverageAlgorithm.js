@@ -15,15 +15,16 @@ var rigidCoverageAlgorithm = {
    * Executes the rigidCoverageAlgorithm on the input nodeList.
    *
    * @param  {[NodeObject]} nodeList The list of nodes.
+   * @param  {Object}       view The D3 graph object
    * @return {Void}
    */
-  execute : (nodeList) => {
+  execute : function(nodeList, view) {
     // Sort nodes in ascending order
     nodeList.sort(function(a,b){
       return a.x - b.x;
     });
 
-    doCoverage(nodeList);
+    doCoverage(nodeList, view);
   }
 
   /**
@@ -35,24 +36,38 @@ var rigidCoverageAlgorithm = {
    * are stacked at the right side of the unit interval.
    *
    * @param  {[NodeObject]} nodeList The list of nodes.
+   * @param  {Object}       view The D3 graph object
    * @return {Void}
    */
-  doCoverage : (nodeList) => {
+  doCoverage : function (nodeList, view) {
+    this.placeFirstNode(nodeList[0]);
+    this.coverageIteration(nodeList, view, 1);
+  }
+
+  coverageIteration : function(nodeList, view, currentNode) {
+    var previousNode = nodeList[currentNode - 1];
     var endOfUnitInterval = 1;
-    placeFirstNode(nodeList[0]);
 
-    // Walk left to right for each sensor
-    for (var currentNode = 1; currentNode < nodeList.length; currentNode++) {
-      var previousNode = currentNode - 1;
+    // Case: the previous node covers to the end of the unit interval
+    if (previousNode.rightBoundary() >= endOfUnitInterval) {
+      view.movement.value += (1 - currentNode.x);
 
-      // Case: the previous node covers to the end of the unit interval
-      if (previousNode.rightBoundary() >= endOfUnitInterval) {
-        // We stack remaining nodes at the end of the unit interval
-        currentNode.x = endOfUnitInterval;
-      } else {
-        // Move node to edge of the previous node's sensor
-        currentNode.x = previousNode.rightBoundary() + currentNode.radius;
-      }
+      // We stack remaining nodes at the end of the unit interval
+      currentNode.x = endOfUnitInterval;
+    } else {
+      var newPosition = previousNode.rightBoundary() + currentNode.radius;
+      view.movement.value += Math.abs(newPosition - currentNode.x);
+
+      // Move node to edge of the previous node's sensor
+      currentNode.x = newPosition;
+    }
+    // Update graph
+    view.update(nodeList);
+
+    if (currentNode < nodeList.length) {
+      setTimeout(function() {
+        this.coverageIteration(nodeList, view, currentNode++);
+      }, 1000);
     }
   }
 
@@ -63,7 +78,7 @@ var rigidCoverageAlgorithm = {
    * @param  {NodeObject} node The first node in the unit interval.
    * @return {Void}
    */
-  placeFirstNode : (node) => {
+  placeFirstNode : function(node) {
     node.x = node.radius;
   }
 }
