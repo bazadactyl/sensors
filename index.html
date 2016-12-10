@@ -16,7 +16,6 @@
     </header>
 
     <div id="fields">
-      <form>
         <span>Node Radius:</span> </br>
         <input type="number" id="radius" min ="0"/> </br>
         <span>Number of Sensors:</span> </br>
@@ -28,9 +27,11 @@
         </br>
         <button  name="start" onclick="runSimulation()"> Start </button>
         <button  name="reset" onclick="resetSimulation()"> Reset </button>
-      </form>
     </div>
-
+    <div id= "movement">
+        <span> Movement count: </span>
+        <span id="count">0</span> 
+     </div>
     <div id="graphic"> </div>
 
   </body>
