@@ -39,7 +39,7 @@ var resetSimulation = function() {
 
 var runSimulation = function() {
   console.log("run simulation");
-  var radius = document.getElementById("radius").value;
+  var radius = parseFloat(document.getElementById("radius").value);
   var numberOfSensors = document.getElementById("num_of_sensors").value;
   console.log(radius + " " + numberOfSensors);
   var nodes = [];
@@ -48,12 +48,13 @@ var runSimulation = function() {
       delay: 1000,
       update: function(){}
     };
+  view.movement.value = 0;
 
   for (i = 0; i < numberOfSensors; i++) {
     var randomStartPosition = Math.random();
     nodes[i] = createNode(radius, randomStartPosition);
   }
- 
+
   runAlgorithm(nodes, view);
 }
 

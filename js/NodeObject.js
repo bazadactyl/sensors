@@ -3,11 +3,11 @@ var nodeObject = {
   x: 0,
   y: 0,
 
-  leftBoundary: () => { return x - radius; },
+  leftBoundary: function() { return this.x - this.radius; },
 
-  rightBoundary: () => { return x + radius; },
+  rightBoundary: function() { return this.x + this.radius; },
 
-  isOverlapping: (otherNode) => {
+  isOverlapping: function(otherNode) {
     // Nodes overlap if their sensor boundaries overlap
     if (otherNode.leftBoundary() < this.rightBoundary()
         || otherNode.rightBoundary() > this.leftBoundary()) {
