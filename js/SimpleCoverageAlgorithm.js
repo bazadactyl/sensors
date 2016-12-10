@@ -1,6 +1,6 @@
 var simpleCoverageAlgorithm = {
 
-  execute: function(nodes, view) {
+  execute: async function(nodes, view) {
 
     var radius = nodes[0].radius;
     var diameter = radius * 2;
@@ -50,8 +50,9 @@ var simpleCoverageAlgorithm = {
     } // else the area is covered.
 
   },
-  update: function(view, movement, nodes) {
+  update: async function(view, movement, nodes) {
     view.movement.value += movement;
     view.update(nodes);
   }
+
 };
