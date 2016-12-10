@@ -5,6 +5,8 @@
       <script src="http://d3js.org/d3.v3.min.js" charset="utf-8" type="text/javascript"></script>
      <script type="text/javascript" src="js/sensors.js"></script>
      <script type="text/javascript" src="js/NodeObject.js"></script>
+     <script type="text/javascript" src="js/RigidCoverage.js"></script>
+     <script type="text/javascript" src="js/SimpleCoverageAlgorithm.js"></script>
 
   </head>
   <body>
@@ -14,8 +16,7 @@
     </header>
 
     <div id="fields">
-        <span> unit interval </span>
-        <input type="number" id="unit_interval" min ="0"/></br>
+      <form>
         <span>radius of nodes</span>
         <input type="number" id="radius" min ="0"/> </br>
         <span> # of sensors </span>
@@ -23,6 +24,7 @@
         </br>
         <button  name="start" onclick="runSimulation()"> Start </button>
         <button  name="reset" onclick="resetSimulation()"> Reset </button>
+      </form>
     </div>
 
     <div id="graphic"> </div>
