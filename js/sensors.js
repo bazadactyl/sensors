@@ -4,12 +4,30 @@ Sensors.
 
 // Create a new sensor node for use in the simulation
 function createNode(radius, xStartPos) {
-    var newNode = new Node();
+    var newNode = Object.create(nodeObject);
     newNode.radius = radius;
     newNode.x = xStartPos;
     newNode.y = 0;
 
     return newNode;
+}
+
+/**
+ * Selects the algorithm to use from the
+ * radio buttons in the UI.
+ *
+ * @return {Object} The algorithm object selected.
+ */
+function selectAlgorithm() {
+  var algorithm;
+
+  if (document.getElementById("rigid").checked) {
+    algorithm = Object.create(rigidCoverageAlgorithm);
+  } else if (document.getElementById("simple".checked)) {
+    algorithm = Object.create(simpleCoverageAlgorithm);
+  }
+
+  return algorithm;
 }
 
 var resetSimulation = function() {
@@ -23,21 +41,20 @@ var runSimulation = function() {
   console.log("run simulation");
   var radius = document.getElementById("radius").value;
   var numberOfSensors = document.getElementById("num_of_sensors").value;
-  console.log(unitInterval +" " + radius + " " + numberOfSensors);
+  console.log(radius + " " + numberOfSensors);
   var nodes = [];
 
   for (i = 0; i < numberOfSensors; i++) {
-    var randomStartPosition = Math.random() * unitInterval;
-    nodes[i] = new node(radius, randomStartPosition);
+    var randomStartPosition = Math.random();
+    nodes[i] = createNode(radius, randomStartPosition);
   }
 
-
-  runAlgorithm(nodes, unitInterval);
+  runAlgorithm(nodes);
 }
 
 
-var runAlgorithm = function(nodes, interval) {
+var runAlgorithm = function(nodes) {
   // render graphic
-  //start the algo
-
+  // start the algo
+  var algorithm = selectAlgorithm();
 }
