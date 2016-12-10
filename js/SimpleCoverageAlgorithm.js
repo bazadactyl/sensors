@@ -41,6 +41,7 @@ var simpleCoverageAlgorithm = {
         }, view.delay);
       }
       // as soon as there is no gap, we are good as the first pass covered everything
+  }
   },
   checkRight: function(nodes, view){
     if (1 - nodes[nodes.length - 1].x > radius) {
