@@ -43,18 +43,27 @@ var runSimulation = function() {
   var numberOfSensors = document.getElementById("num_of_sensors").value;
   console.log(radius + " " + numberOfSensors);
   var nodes = [];
+  var view = {
+      movement: document.getElementById("count"),
+      delay: 1000,
+      update: function(){}
+    };
 
   for (i = 0; i < numberOfSensors; i++) {
     var randomStartPosition = Math.random();
     nodes[i] = createNode(radius, randomStartPosition);
   }
-
-  runAlgorithm(nodes);
+ 
+  runAlgorithm(nodes, view);
 }
 
 
-var runAlgorithm = function(nodes) {
+var runAlgorithm = function(nodes, view) {
   // render graphic
   // start the algo
+
   var algorithm = selectAlgorithm();
+
+  algorithm.execute(nodes, view);
+
 }
