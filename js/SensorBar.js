@@ -9,18 +9,14 @@ function createSensorBar(config) {
 	// set color scale, and map each key to a color
 	var color = d3.scaleOrdinal()
 		.range(config.colors);
+	// var HOWTOGETCOLOR = color(datapoint.key);
 
 	// set chart dimensions
-	var margin = {
-			top: 50,
-			right: 30,
-			bottom: 60,
-			left: 55
-		};
-	var width = document.getElementById(config.chartid).offsetWidth - margin.left - margin.right;
-	var height = document.getElementById(config.chartid).offsetHeight - margin.top - margin.bottom;
-	width = 800;
-	height = 400;
+	var margin = { top: 50,	right: 30, bottom: 60, left: 55 };
+	// var width = document.getElementById(config.chartid).offsetWidth - margin.left - margin.right;
+	// var height = document.getElementById(config.chartid).offsetHeight - margin.top - margin.bottom;
+	var width = 800;
+	var height = 400;
 
 	// set X-scale
 	var x = d3.scaleLinear().range([0, width]);
@@ -31,10 +27,10 @@ function createSensorBar(config) {
 		.attr('class', 'd3-tip')
 		.offset([-10, 0])
 		.html(function(datapoint) {
-			return '<table><thead><tr><td colspan="3">' + dateFormat(new Date(datapoint.xpos)) +
-				'</td></tr></thead><tbody><tr><td class="legend-color-guide"><div class="icon" style="background:' +
-				color(datapoint.key) + ';"  ></div></td><td class="key">' + datapoint.key + '</td><td class="value">' +
-				datapoint.y + '</td></tr></tbody></table>';
+			return '<table><thead><tr><td colspan="3">' + 'Sensor #' + datapoint.id +
+				'</td></tr></thead><tbody><tr>' +
+				'<td class="key">' + 'Radius ' + datapoint.radius.toFixed(5) + '</td></tr><tr><td class="value">' +
+				'X-position ' + datapoint.x.toFixed(5) + '</td></tr></tbody></table>';
 		});
 
 	// add an svg element to contain the chart
@@ -69,7 +65,6 @@ function createSensorBar(config) {
 		// }));
 
 		// update scale domains based on the data
-		// x.domain(d3.extent(data, function(d) { return d.xpos; }));
 		x.domain([0, 1]);
 
 		// update scales (this allows for chart resizing when the window is resized)
@@ -136,31 +131,28 @@ function createSensorBar(config) {
 			.style('fill', "steelblue")
 			.style("opacity", 1.0);
 
-		// // refresh mouse event listeners
-		// dot.on('mouseover', function(datapoint) {
-		// 	d3.select(this)
-		// 		.style("fill", d3.rgb(color(datapoint.key)).darker())
-		// 	    .attr('r', dotRadius * 1.50);
-		// 	return tip.show(datapoint);
-		// }).on('mouseout', function(datapoint) {
-		// 	d3.select(this)
-		// 		.style("fill", color(datapoint.key))
-		// 	    .attr('r', dotRadius);
-		// 	return tip.hide(datapoint);
-		// });
-		//
-		// // refresh mouse event listeners
-		// dot.on('mouseover', function(datapoint) {
-		// 	d3.select(this)
-		// 		.style("fill", d3.rgb(color(datapoint.key)).darker())
-		// 	    .attr('r', dotRadius * 1.50);
-		// 	return tip.show(datapoint);
-		// }).on('mouseout', function(datapoint) {
-		// 	d3.select(this)
-		// 		.style("fill", color(datapoint.key))
-		// 	    .attr('r', dotRadius);
-		// 	return tip.hide(datapoint);
-		// });
+		// refresh mouse event listeners
+		chart.selectAll(".dot").on('mouseover', function(datapoint) {
+			d3.select(this)
+				.style("fill", d3.rgb("steelblue").darker())
+			    .attr('r', sensorRadius * 1.50);
+			return tip.show(datapoint);
+		}).on('mouseout', function(datapoint) {
+			d3.select(this)
+				.style("fill", "steelblue")
+			    .attr('r', sensorRadius);
+			return tip.hide(datapoint);
+		});
+
+		chart.selectAll(".radius").on('mouseover', function(datapoint) {
+			d3.select(this)
+				.style("fill", d3.rgb("red").darker());
+			return tip.show(datapoint);
+		}).on('mouseout', function(datapoint) {
+			d3.select(this)
+				.style("fill", "red");
+			return tip.hide(datapoint);
+		});
 	}
 
 	return update;
