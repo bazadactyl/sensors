@@ -4,6 +4,9 @@ var simpleCoverageAlgorithm = {
     nodes.sort(function(a,b){
       return a.x - b.x;
     });
+
+    view.update(nodes);
+
     // starts the process
     simpleCoverageAlgorithm.checkLeft(nodes, view);
 
@@ -17,7 +20,7 @@ var simpleCoverageAlgorithm = {
       simpleCoverageAlgorithm.update(view, movement, nodes);
     }  // else: we overlap or the radius or the gap is perfectly covered.
 
-    if (p < nodes.lenght) {
+    if (p < nodes.length) {
       setTimeout(function() {
         simpleCoverageAlgorithm.moveRight(nodes, ++p, view);
       }, view.delay);
