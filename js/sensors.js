@@ -39,6 +39,7 @@ var resetSimulation = function() {
   document.getElementById("num_of_sensors").value = 0;
   document.getElementById("count").innerHTML = 0;
   document.getElementById("start_button").disabled = false;
+  document.getElementById("log_list").innerHTML = "";
   // clear the graphic
   sensorBar([]);
 }
