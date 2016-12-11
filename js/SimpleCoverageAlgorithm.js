@@ -14,7 +14,7 @@ var simpleCoverageAlgorithm = {
       // shift it to optimally cover the gap the distance between the 2 nodes is = to the diameter
       var movement = ((nodes[p].x - nodes[p-1].x) - diameter);
       nodes[p].x = nodes[p].x - movement;
-      simpleCoverageAlgorithm.update(view, movement, nodes);
+      simpleCoverageAlgorithm.update(view, movement, nodes, p);
     }  // else: we overlap or the radius or the gap is perfectly covered.
 
     if (p < nodes.lenght) {
@@ -31,7 +31,7 @@ var simpleCoverageAlgorithm = {
       // shift it to optimally cover the gap the distance between the 2 nodes is = to the diameter
       var movement = ((nodes[p].x - nodes[p-1].x) - diameter);
       nodes[p].x = nodes[p].x + movement;
-      simpleCoverageAlgorithm.update(view, movement, nodes);
+      simpleCoverageAlgorithm.update(view, movement, nodes, p);
 
       if (p > 0) {
         setTimeout(function() {
@@ -47,7 +47,7 @@ var simpleCoverageAlgorithm = {
       // shift the right most node
       var movement = ((1 - nodes[nodes.length - 1].x) - radius);
       nodes[nodes.length -1].x =  nodes[nodes.length -1].x + movement;
-      simpleCoverageAlgorithm.update(view, movement, nodes);
+      simpleCoverageAlgorithm.update(view, movement, nodes, nodes.lenght - 1);
 
       setTimeout(function() {
         simpleCoverageAlgorithm.moveLeft(nodes, nodes.length - 2, view);
@@ -59,7 +59,7 @@ var simpleCoverageAlgorithm = {
     if (nodes[0].x - radius > 0) {
       var movement = (nodes[0].x - radius);
       nodes[0].x = nodes[0].x - movement; // allign it with 0
-      simpleCoverageAlgorithm.update(view, movement, nodes);
+      simpleCoverageAlgorithm.update(view, movement, nodes, 0);
       // update the view
     }
     setTimeout(function() {
@@ -67,8 +67,15 @@ var simpleCoverageAlgorithm = {
     }, view.delay);
 
   },
-  update: function(view, movement, nodes) {
-    view.movement.innerHTML = parseFloat(view.movement.innerHTML) + movement;
+  update: function(view, movement, nodes, pos) {
+    var originalTotal = parseFloat(view.movement.innerHTML);
+    view.movement.innerHTML = originalTotal + movement;
+    var logInfo = "Node Id: " + nodes[pos].id " moved from position:" + startPos
+    + " to position: " + nodes[pos].x + "\n"
+    + "The node displaced a distance of " + movement + "\n"
+    + "Total distance moved = " + originalTotal + movement + "\n";
+    var entry = document.createElement('li');
+    entry.appendChild(document.createTextNode(logInfo));
     console.log(view.movement.innerHTML);
     view.update(nodes);
   }

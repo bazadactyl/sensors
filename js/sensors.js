@@ -48,10 +48,12 @@ var runSimulation = function() {
   console.log(radius + " " + numberOfSensors);
   var nodes = [];
   var movementCounter = document.getElementById("count");
+  var logList = document.getElementById("log_list");
   var view = {
       movement: movementCounter,
       delay: 1000,
-      update: function(){}
+      update: function(){},
+      log: logList
     };
   for (i = 0; i < numberOfSensors; i++) {
     var randomStartPosition = Math.random();
