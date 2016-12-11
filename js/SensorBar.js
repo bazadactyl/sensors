@@ -17,8 +17,8 @@ function createSensorBar(config) {
 			bottom: 60,
 			left: 55
 		};
-	var width = document.getElementById(config.chartid).offsetWidth - margin.left - margin.right;
-	var height = document.getElementById(config.chartid).offsetHeight - margin.top - margin.bottom;
+//	var width = document.getElementById(config.chartid).offsetWidth - margin.left - margin.right;
+//	var height = document.getElementById(config.chartid).offsetHeight - margin.top - margin.bottom;
 	width = 800;
 	height = 400;
 

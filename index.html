@@ -4,12 +4,12 @@
       <title>Sensors COMP3203 - A2</title>
       <script type="text/javascript" src="js/d3.v4.js"></script>
       <script type="text/javascript" src="js/d3-tip.js"></script>
+      <script type="text/javascript" src="js/SensorBar.js"></script>
+      <script type="text/javascript" src="js/LineChart.js"></script>
       <script type="text/javascript" src="js/sensors.js"></script>
       <script type="text/javascript" src="js/NodeObject.js"></script>
       <script type="text/javascript" src="js/RigidCoverageAlgorithm.js"></script>
       <script type="text/javascript" src="js/SimpleCoverageAlgorithm.js"></script>
-      <script type="text/javascript" src="js/SensorBar.js"></script>
-      <script type="text/javascript" src="js/LineChart.js"></script>
 
   </head>
   <body>
@@ -38,39 +38,5 @@
      </div>
     <div id="graphic"> </div>
     <div class="chart" id="sensor-bar"></div>
-    <script type="text/javascript">
-        // SENSOR BAR DEMO CODE
-        function drawSensorBar() {
-            var updateSensorBar = createSensorBar({
-                chartid: "sensor-bar",
-                chartTitle: "Sensor Bar",
-                yAxisLabel: "",
-                colors: ["#389B34", "#381234", "#A41267"]
-            });
-
-            function sleep(ms) {
-              return new Promise(resolve => setTimeout(resolve, ms));
-            }
-
-            async function demo() {
-                var rand = d3.randomUniform(0,1);
-                while(true) {
-                    nodes = [];
-                    for (n in [1,2,3,4,5,6,7,8,9,10]) {
-                        var radius   = rand() / 6;
-                        var xpos     = rand();
-                        var sensorID = n;
-                        nodes.push(createNode(radius, xpos, sensorID));
-                    }
-                    updateSensorBar(nodes);
-                    await sleep(1000);
-                }
-            }
-            demo();
-        }
-
-        drawSensorBar();
-    </script>
-
   </body>
 </html>

@@ -61,7 +61,7 @@ var rigidCoverageAlgorithm = {
       currentNode.x = newPosition;
     }
     // Update graph
-    //view.update(nodeList);
+    view.update(nodeList);
 
     currentNodeIndex += 1;
 

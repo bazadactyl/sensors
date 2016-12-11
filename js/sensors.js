@@ -50,13 +50,13 @@ var runSimulation = function() {
   var movementCounter = document.getElementById("count");
   var view = {
       movement: movementCounter,
-      delay: 1000,
-      update: function(){}
+      delay: 1000
     };
   for (i = 0; i < numberOfSensors; i++) {
     var randomStartPosition = Math.random();
     nodes.push(createNode(radius, randomStartPosition, i));
   }
+  view.update = drawSensorBar(nodes);
 
   runAlgorithm(nodes, view);
 }
@@ -68,4 +68,35 @@ var runAlgorithm = function(nodes, view) {
   var algorithm = selectAlgorithm();
 
   algorithm.execute(nodes, view);
+}
+
+// SENSOR BAR DEMO CODE
+function drawSensorBar(nodes) {
+    var updateSensorBar = createSensorBar({
+        chartid: "sensor-bar",
+        chartTitle: "Sensor Bar",
+        yAxisLabel: "",
+        colors: ["#389B34", "#381234", "#A41267"]
+    });
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function demo() {
+        var rand = d3.randomUniform(0,1);
+        while(true) {
+            nodes = [];
+            for (n in [1,2,3,4,5,6,7,8,9,10]) {
+                var radius   = rand() / 6;
+                var xpos     = rand();
+                var sensorID = n;
+                nodes.push(createNode(radius, xpos, sensorID));
+            }
+            updateSensorBar(nodes);
+            await sleep(1000);
+        }
+    }
+
+    return updateSensorBar;
 }
