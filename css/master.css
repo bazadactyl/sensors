@@ -61,3 +61,7 @@
 	stroke: steelblue;
 	stroke-width: 3px;
 }
+
+#logs {
+  margin-bottom: 100px
+}
