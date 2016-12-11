@@ -8,7 +8,10 @@ var simpleCoverageAlgorithm = {
     view.update(nodes);
 
     // starts the process
+  setTimeout(function() {
     simpleCoverageAlgorithm.checkLeft(nodes, view);
+  }, view.delay);
+
 
   },
   moveRight: function(nodes, p, view) {
@@ -20,9 +23,9 @@ var simpleCoverageAlgorithm = {
       simpleCoverageAlgorithm.update(view, movement, nodes, p);
     }  // else: we overlap or the radius or the gap is perfectly covered.
 
-    if (p < nodes.length) {
+    if (p < nodes.length - 1) {
       setTimeout(function() {
-        simpleCoverageAlgorithm.moveRight(nodes, ++p, view);
+        simpleCoverageAlgorithm.moveRight(nodes, p+1, view);
       }, view.delay);
     } else {
       simpleCoverageAlgorithm.checkRight(nodes, view);
@@ -30,9 +33,9 @@ var simpleCoverageAlgorithm = {
   },
   moveLeft: function (nodes, p, view) {
     var diameter = 2 * nodes[p].radius;
-    if (nodes[p+1].x - nodes[p].x > diameter) {
+    if (nodes[p+1].x - nodes[p].x  > diameter) {
       // shift it to optimally cover the gap the distance between the 2 nodes is = to the diameter
-      var movement = ((nodes[p].x - nodes[p-1].x) - diameter);
+      var movement = ((nodes[p+1].x - nodes[p].x) - diameter);
       nodes[p].x = nodes[p].x + movement;
       simpleCoverageAlgorithm.update(view, movement, nodes, p);
 
