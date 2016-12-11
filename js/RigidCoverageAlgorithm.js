@@ -10,7 +10,7 @@
  * @author Chris Ermel
  */
 var rigidCoverageAlgorithm = {
-  
+
   /**
    * Executes the rigidCoverageAlgorithm on the input nodeList.
    *
@@ -24,8 +24,8 @@ var rigidCoverageAlgorithm = {
       return a.x - b.x;
     });
 
-    doCoverage(nodeList, view);
-  }
+    this.doCoverage(nodeList, view);
+  },
 
   /**
    * Performs the rigid coverage placement on the
@@ -40,12 +40,13 @@ var rigidCoverageAlgorithm = {
    * @return {Void}
    */
   doCoverage : function (nodeList, view) {
-    this.placeFirstNode(nodeList[0]);
+    this.placeFirstNode(nodeList[0], view);
     this.coverageIteration(nodeList, view, 1);
-  }
+  },
 
-  coverageIteration : function(nodeList, view, currentNode) {
-    var previousNode = nodeList[currentNode - 1];
+  coverageIteration : function(nodeList, view, currentNodeIndex) {
+    var previousNode = nodeList[currentNodeIndex - 1];
+    var currentNode = nodeList[currentNodeIndex];
     var endOfUnitInterval = 1;
 
     // Case: the previous node covers to the end of the unit interval
@@ -62,14 +63,16 @@ var rigidCoverageAlgorithm = {
       currentNode.x = newPosition;
     }
     // Update graph
-    view.update(nodeList);
+    //view.update(nodeList);
 
-    if (currentNode < nodeList.length) {
+    currentNodeIndex += 1;
+
+    if (currentNodeIndex < nodeList.length) {
       setTimeout(function() {
-        this.coverageIteration(nodeList, view, currentNode++);
-      }, 1000);
+        rigidCoverageAlgorithm.coverageIteration(nodeList, view, currentNodeIndex);
+      }, view.delay);
     }
-  }
+  },
 
   /**
    * Places the first node at radius distance away from
@@ -78,7 +81,8 @@ var rigidCoverageAlgorithm = {
    * @param  {NodeObject} node The first node in the unit interval.
    * @return {Void}
    */
-  placeFirstNode : function(node) {
+  placeFirstNode : function(node, view) {
+    view.movement.value += Math.abs(node.radius - node.x);
     node.x = node.radius;
   }
 }
