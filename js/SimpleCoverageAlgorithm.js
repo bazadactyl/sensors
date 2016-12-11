@@ -47,7 +47,7 @@ var simpleCoverageAlgorithm = {
       // shift the right most node
       var movement = ((1 - nodes[nodes.length - 1].x) - radius);
       nodes[nodes.length -1].x =  nodes[nodes.length -1].x + movement;
-      simpleCoverageAlgorithm.update(view, movement, nodes, nodes.lenght - 1);
+      simpleCoverageAlgorithm.update(view, movement, nodes, nodes.length - 1);
 
       setTimeout(function() {
         simpleCoverageAlgorithm.moveLeft(nodes, nodes.length - 2, view);
