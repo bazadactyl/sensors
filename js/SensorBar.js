@@ -9,7 +9,6 @@ function createSensorBar(config) {
 	// set color scale, and map each key to a color
 	var color = d3.scaleOrdinal()
 		.range(config.colors);
-	// var HOWTOGETCOLOR = color(datapoint.key);
 
 	// set chart dimensions
 	var margin = { top: 50,	right: 30, bottom: 60, left: 55 };
@@ -59,11 +58,6 @@ function createSensorBar(config) {
 			.attr("width", width + margin.left + margin.right)
 			.attr("height", height + margin.top + margin.bottom);
 
-		// update the color scale
-		// color.domain(d3.keys(data[0]).filter(function(key) {
-		//     return key !== "date";
-		// }));
-
 		// update scale domains based on the data
 		x.domain([0, 1]);
 
@@ -108,7 +102,7 @@ function createSensorBar(config) {
 		  .transition()
 			.duration(duration)
 			.attr('cx', function(d) { return x(d.x); })
-			.attr('cy', function(d) { console.log("UPDATE DOT" + " " + d.id); return (height/2); })
+			.attr('cy', function(d) { return (height/2); })
 			.attr('r',  function(d) { return sensorRadius; });
 
 		// ENTER new elements present in the data
@@ -125,13 +119,13 @@ function createSensorBar(config) {
 
 		chart.selectAll(".sensor.new").append('circle')
 			.attr('class', 'dot')
-			.attr("cx", function(d) { return x(d.x); })
-			.attr("cy", function(d) { console.log("ENTER DOT" + " " + d.id); return (height/2); })
+			.attr("cx", function(d) { console.log(d3.interpolateRainbow(d.x)); return x(d.x); })
+			.attr("cy", function(d) { return (height/2); })
 			.attr("r",  function(d) { return sensorRadius; })
-			.style('fill', "steelblue")
+			.style('fill', function(d) { return d3.interpolateViridis(d.id / data.length); })
 			.style("opacity", 1.0);
 
-		// refresh mouse event listeners
+		// refresh mouse event listeners on sensor dots
 		chart.selectAll(".dot").on('mouseover', function(datapoint) {
 			d3.select(this)
 				.style("fill", d3.rgb("steelblue").darker())
@@ -144,6 +138,7 @@ function createSensorBar(config) {
 			return tip.hide(datapoint);
 		});
 
+		// refresh mouse event listeners on sensor radii
 		chart.selectAll(".radius").on('mouseover', function(datapoint) {
 			d3.select(this)
 				.style("fill", d3.rgb("red").darker());
