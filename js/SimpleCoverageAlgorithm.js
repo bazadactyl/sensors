@@ -19,7 +19,7 @@ var simpleCoverageAlgorithm = {
 
     if (p < nodes.lenght) {
       setTimeout(function() {
-        simpleCoverageAlgorithm.moveRight(nodes, p++, v);
+        simpleCoverageAlgorithm.moveRight(nodes, ++p, view);
       }, view.delay);
     } else {
       simpleCoverageAlgorithm.checkRight(nodes, view);
@@ -35,7 +35,7 @@ var simpleCoverageAlgorithm = {
 
       if (p > 0) {
         setTimeout(function() {
-          simpleCoverageAlgorithm.moveLeft(nodes, p--, view);
+          simpleCoverageAlgorithm.moveLeft(nodes, --p, view);
         }, view.delay);
       }
       // as soon as there is no gap, we are good as the first pass covered everything
