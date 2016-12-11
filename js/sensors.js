@@ -65,9 +65,7 @@ var runSimulation = function() {
 var runAlgorithm = function(nodes, view) {
   // render graphic
   // start the algo
-
   var algorithm = selectAlgorithm();
 
   algorithm.execute(nodes, view);
-
 }
