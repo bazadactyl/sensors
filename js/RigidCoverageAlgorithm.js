@@ -40,11 +40,13 @@ var rigidCoverageAlgorithm = {
    * @return {Void}
    */
   doCoverage : function (nodeList, view) {
-    view.update(nodeList);
+    if (nodeList.length > 0) {
+      view.update(nodeList);
 
-    setTimeout(function() {
-      rigidCoverageAlgorithm.coverageIteration(nodeList, view, 0);
-    }, view.delay);
+      setTimeout(function() {
+        rigidCoverageAlgorithm.coverageIteration(nodeList, view, 0);
+      }, view.delay);
+    }
   },
 
   coverageIteration : function(nodeList, view, currentNodeIndex) {

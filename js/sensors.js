@@ -2,6 +2,8 @@
 Sensors.
 */
 
+var sensorBar;
+
 // Create a new sensor node for use in the simulation
 function createNode(radius, xStartPos, id) {
     var newNode = Object.create(nodeObject);
@@ -37,7 +39,8 @@ var resetSimulation = function() {
   document.getElementById("num_of_sensors").value = 0;
   document.getElementById("count").innerHTML = 0;
   document.getElementById("start_button").disabled = false;
-    // clear the graphic
+  // clear the graphic
+  sensorBar([]);
 }
 
 var runSimulation = function() {
@@ -56,7 +59,10 @@ var runSimulation = function() {
     var randomStartPosition = Math.random();
     nodes.push(createNode(radius, randomStartPosition, i));
   }
-  view.update = drawSensorBar(nodes);
+  if (sensorBar === undefined) {
+    sensorBar = drawSensorBar(nodes);
+  }
+  view.update = sensorBar;
 
   runAlgorithm(nodes, view);
 }
@@ -78,25 +84,6 @@ function drawSensorBar(nodes) {
         yAxisLabel: "",
         colors: ["#389B34", "#381234", "#A41267"]
     });
-
-    function sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    async function demo() {
-        var rand = d3.randomUniform(0,1);
-        while(true) {
-            nodes = [];
-            for (n in [1,2,3,4,5,6,7,8,9,10]) {
-                var radius   = rand() / 6;
-                var xpos     = rand();
-                var sensorID = n;
-                nodes.push(createNode(radius, xpos, sensorID));
-            }
-            updateSensorBar(nodes);
-            await sleep(1000);
-        }
-    }
 
     return updateSensorBar;
 }
