@@ -23,7 +23,7 @@ function selectAlgorithm() {
 
   if (document.getElementById("rigid").checked) {
     algorithm = Object.create(rigidCoverageAlgorithm);
-  } else if (document.getElementById("simple".checked)) {
+  } else if (document.getElementById("simple").checked) {
     algorithm = Object.create(simpleCoverageAlgorithm);
   }
 
@@ -34,6 +34,8 @@ var resetSimulation = function() {
   console.log("reset");
   document.getElementById("radius").value = 0;
   document.getElementById("num_of_sensors").value = 0;
+  document.getElementById("count").innerHTML = 0;
+  document.getElementById("start_button").disabled = false;
     // clear the graphic
 }
 
@@ -41,18 +43,18 @@ var runSimulation = function() {
   console.log("run simulation");
   var radius = parseFloat(document.getElementById("radius").value);
   var numberOfSensors = document.getElementById("num_of_sensors").value;
+  document.getElementById("start_button").disabled = true;
   console.log(radius + " " + numberOfSensors);
   var nodes = [];
+  var movementCounter = document.getElementById("count");
   var view = {
-      movement: document.getElementById("count"),
+      movement: movementCounter,
       delay: 1000,
       update: function(){}
     };
-  view.movement.value = 0;
-
   for (i = 0; i < numberOfSensors; i++) {
     var randomStartPosition = Math.random();
-    nodes[i] = createNode(radius, randomStartPosition);
+    nodes.push(createNode(radius, randomStartPosition));
   }
 
   runAlgorithm(nodes, view);
