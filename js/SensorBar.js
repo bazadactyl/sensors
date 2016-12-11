@@ -113,7 +113,7 @@ function createSensorBar(config) {
 		  .transition()
 			.duration(duration)
 			.attr('cx', function(d) { return x(d.x); })
-			.attr('cy', function(d) { /*console.log("UPDATE DOT" + " " + d.id);*/ return (height/2); })
+			.attr('cy', function(d) { console.log("UPDATE DOT" + " " + d.id); return (height/2); })
 			.attr('r',  function(d) { return sensorRadius; });
 
 		// ENTER new elements present in the data
