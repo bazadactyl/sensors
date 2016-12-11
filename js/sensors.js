@@ -51,9 +51,12 @@ var runSimulation = function() {
   console.log(radius + " " + numberOfSensors);
   var nodes = [];
   var movementCounter = document.getElementById("count");
+  var logList = document.getElementById("log_list");
   var view = {
       movement: movementCounter,
-      delay: 1000
+      delay: 1000,
+      update: function(){},
+      log: logList
     };
   for (i = 0; i < numberOfSensors; i++) {
     var randomStartPosition = Math.random();
@@ -76,7 +79,6 @@ var runAlgorithm = function(nodes, view) {
   algorithm.execute(nodes, view);
 }
 
-// SENSOR BAR DEMO CODE
 function drawSensorBar(nodes) {
     var updateSensorBar = createSensorBar({
         chartid: "sensor-bar",
@@ -86,4 +88,60 @@ function drawSensorBar(nodes) {
     });
 
     return updateSensorBar;
+}
+
+function drawLineChart() {
+    var updateLineChart = createLineChart({
+        chartid: "line-chart",
+        chartTitle: "Sensor Statistics Station",
+        yAxisLabel: "Total Movement",
+        colors: ["#389B34", "#381234", "#A41267"]
+    });
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    async function demo() {
+        // updateLineChart([
+        //     {"radius": 0.01, "rigid-movement": 1000, "simple-movement": 1500},
+        //     {"radius": 0.02, "rigid-movement": 600, "simple-movement": 800},
+        //     {"radius": 0.03, "rigid-movement": 500, "simple-movement": 700},
+        //     {"radius": 0.04, "rigid-movement": 300, "simple-movement": 450},
+        //     {"radius": 0.05, "rigid-movement": 200, "simple-movement": 350},
+        //     {"radius": 0.06, "rigid-movement": 100, "simple-movement": 250},
+        //     {"radius": 0.07, "rigid-movement": 50, "simple-movement": 30},
+        //     {"radius": 0.08, "rigid-movement": 10, "simple-movement": 5}
+        // ]);
+        updateLineChart([
+            {"radius": 0.01, "movement": 1000},
+            {"radius": 0.02, "movement": 600},
+            {"radius": 0.03, "movement": 500},
+            {"radius": 0.04, "movement": 300},
+            {"radius": 0.05, "movement": 200},
+            {"radius": 0.06, "movement": 100},
+            {"radius": 0.07, "movement": 50},
+            {"radius": 0.08, "movement": 10},
+        ]);
+        await sleep(1000);
+        updateLineChart([
+            {"radius": 0.01, "movement": 1200},
+            {"radius": 0.02, "movement": 1000},
+            {"radius": 0.03, "movement": 600},
+            {"radius": 0.04, "movement": 200},
+            {"radius": 0.05, "movement": 100},
+        ]);
+        await sleep(1000);
+        updateLineChart([
+            {"radius": 0.01, "movement": 1200},
+            {"radius": 0.02, "movement": 1000},
+            {"radius": 0.03, "movement": 600},
+            {"radius": 0.04, "movement": 200},
+            {"radius": 0.05, "movement": 100},
+            {"radius": 0.06, "movement": 50},
+            {"radius": 0.07, "movement": 30},
+            {"radius": 0.08, "movement": 10}
+        ]);
+        await sleep(1000);
+    }
+    demo();
 }
