@@ -1,4 +1,5 @@
 var nodeObject = {
+  id: 0,
   radius: 0,
   x: 0,
   y: 0,
