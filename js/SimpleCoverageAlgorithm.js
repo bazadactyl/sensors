@@ -19,7 +19,7 @@ var simpleCoverageAlgorithm = {
 
     if (p < nodes.lenght) {
       setTimeout(function() {
-        simpleCoverageAlgorithm.moveRight(nodes, p++, view);
+        simpleCoverageAlgorithm.moveRight(nodes, ++p, view);
       }, view.delay);
     } else {
       simpleCoverageAlgorithm.checkRight(nodes, view);
