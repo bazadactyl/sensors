@@ -51,14 +51,12 @@ var rigidCoverageAlgorithm = {
 
     // Case: the previous node covers to the end of the unit interval
     if (previousNode.rightBoundary() >= endOfUnitInterval) {
-      view.movement.value += (1 - currentNode.x);
-
+      view.movement.innerHTML = parseFloat(view.movement.innerHTML) + (1 - currentNode.x);
       // We stack remaining nodes at the end of the unit interval
       currentNode.x = endOfUnitInterval;
     } else {
       var newPosition = previousNode.rightBoundary() + currentNode.radius;
-      view.movement.value += Math.abs(newPosition - currentNode.x);
-
+      view.movement.innerHTML = parseFloat(view.movement.innerHTML) + Math.abs(newPosition - currentNode.x);
       // Move node to edge of the previous node's sensor
       currentNode.x = newPosition;
     }
@@ -68,9 +66,9 @@ var rigidCoverageAlgorithm = {
     currentNodeIndex += 1;
 
     if (currentNodeIndex < nodeList.length) {
-      setTimeout(function() {
+      setTimeout(function(view) {
         rigidCoverageAlgorithm.coverageIteration(nodeList, view, currentNodeIndex);
-      }, view.delay);
+      }(view), view.delay);
     }
   },
 
@@ -82,7 +80,7 @@ var rigidCoverageAlgorithm = {
    * @return {Void}
    */
   placeFirstNode : function(node, view) {
-    view.movement.value += Math.abs(node.radius - node.x);
+    view.movement.innerHTML = parseFloat(view.movement.innerHTML) + Math.abs(node.radius - node.x);
     node.x = node.radius;
   }
 }
