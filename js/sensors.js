@@ -3,11 +3,12 @@ Sensors.
 */
 
 // Create a new sensor node for use in the simulation
-function createNode(radius, xStartPos) {
+function createNode(radius, xStartPos, id) {
     var newNode = Object.create(nodeObject);
     newNode.radius = radius;
     newNode.x = xStartPos;
     newNode.y = 0;
+    newNode.id = id;
 
     return newNode;
 }
@@ -54,7 +55,7 @@ var runSimulation = function() {
     };
   for (i = 0; i < numberOfSensors; i++) {
     var randomStartPosition = Math.random();
-    nodes.push(createNode(radius, randomStartPosition));
+    nodes.push(createNode(radius, randomStartPosition, i));
   }
 
   runAlgorithm(nodes, view);
