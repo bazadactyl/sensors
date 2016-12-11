@@ -11,6 +11,7 @@ function createSensorBar(config) {
 		.range(config.colors);
 
 	// set chart dimensions
+<<<<<<< HEAD
 	var margin = {
 			top: 50,
 			right: 30,
@@ -21,6 +22,13 @@ function createSensorBar(config) {
 //	var height = document.getElementById(config.chartid).offsetHeight - margin.top - margin.bottom;
 	width = 800;
 	height = 400;
+=======
+	var margin = { top: 50,	right: 30, bottom: 60, left: 55 };
+	// var width = document.getElementById(config.chartid).offsetWidth - margin.left - margin.right;
+	// var height = document.getElementById(config.chartid).offsetHeight - margin.top - margin.bottom;
+	var width = 800;
+	var height = 400;
+>>>>>>> a207ce35cf12d9738e1568a63207c41405eaf957
 
 	// set X-scale
 	var x = d3.scaleLinear().range([0, width]);
@@ -31,10 +39,10 @@ function createSensorBar(config) {
 		.attr('class', 'd3-tip')
 		.offset([-10, 0])
 		.html(function(datapoint) {
-			return '<table><thead><tr><td colspan="3">' + dateFormat(new Date(datapoint.xpos)) +
-				'</td></tr></thead><tbody><tr><td class="legend-color-guide"><div class="icon" style="background:' +
-				color(datapoint.key) + ';"  ></div></td><td class="key">' + datapoint.key + '</td><td class="value">' +
-				datapoint.y + '</td></tr></tbody></table>';
+			return '<table><thead><tr><td colspan="3">' + 'Sensor #' + datapoint.id +
+				'</td></tr></thead><tbody><tr>' +
+				'<td class="key">' + 'Radius ' + datapoint.radius.toFixed(5) + '</td></tr><tr><td class="value">' +
+				'X-position ' + datapoint.x.toFixed(5) + '</td></tr></tbody></table>';
 		});
 
 	// add an svg element to contain the chart
@@ -63,13 +71,7 @@ function createSensorBar(config) {
 			.attr("width", width + margin.left + margin.right)
 			.attr("height", height + margin.top + margin.bottom);
 
-		// update the color scale
-		// color.domain(d3.keys(data[0]).filter(function(key) {
-		//     return key !== "date";
-		// }));
-
 		// update scale domains based on the data
-		// x.domain(d3.extent(data, function(d) { return d.xpos; }));
 		x.domain([0, 1]);
 
 		// update scales (this allows for chart resizing when the window is resized)
@@ -113,7 +115,7 @@ function createSensorBar(config) {
 		  .transition()
 			.duration(duration)
 			.attr('cx', function(d) { return x(d.x); })
-			.attr('cy', function(d) { console.log("UPDATE DOT" + " " + d.id); return (height/2); })
+			.attr('cy', function(d) { return (height/2); })
 			.attr('r',  function(d) { return sensorRadius; });
 
 		// ENTER new elements present in the data
@@ -130,37 +132,35 @@ function createSensorBar(config) {
 
 		chart.selectAll(".sensor.new").append('circle')
 			.attr('class', 'dot')
-			.attr("cx", function(d) { return x(d.x); })
-			.attr("cy", function(d) { console.log("ENTER DOT" + " " + d.id); return (height/2); })
+			.attr("cx", function(d) { console.log(d3.interpolateRainbow(d.x)); return x(d.x); })
+			.attr("cy", function(d) { return (height/2); })
 			.attr("r",  function(d) { return sensorRadius; })
-			.style('fill', "steelblue")
+			.style('fill', function(d) { return d3.interpolateViridis(d.id / data.length); })
 			.style("opacity", 1.0);
 
-		// // refresh mouse event listeners
-		// dot.on('mouseover', function(datapoint) {
-		// 	d3.select(this)
-		// 		.style("fill", d3.rgb(color(datapoint.key)).darker())
-		// 	    .attr('r', dotRadius * 1.50);
-		// 	return tip.show(datapoint);
-		// }).on('mouseout', function(datapoint) {
-		// 	d3.select(this)
-		// 		.style("fill", color(datapoint.key))
-		// 	    .attr('r', dotRadius);
-		// 	return tip.hide(datapoint);
-		// });
-		//
-		// // refresh mouse event listeners
-		// dot.on('mouseover', function(datapoint) {
-		// 	d3.select(this)
-		// 		.style("fill", d3.rgb(color(datapoint.key)).darker())
-		// 	    .attr('r', dotRadius * 1.50);
-		// 	return tip.show(datapoint);
-		// }).on('mouseout', function(datapoint) {
-		// 	d3.select(this)
-		// 		.style("fill", color(datapoint.key))
-		// 	    .attr('r', dotRadius);
-		// 	return tip.hide(datapoint);
-		// });
+		// refresh mouse event listeners on sensor dots
+		chart.selectAll(".dot").on('mouseover', function(datapoint) {
+			d3.select(this)
+				.style("fill", d3.rgb("steelblue").darker())
+			    .attr('r', sensorRadius * 1.50);
+			return tip.show(datapoint);
+		}).on('mouseout', function(datapoint) {
+			d3.select(this)
+				.style("fill", "steelblue")
+			    .attr('r', sensorRadius);
+			return tip.hide(datapoint);
+		});
+
+		// refresh mouse event listeners on sensor radii
+		chart.selectAll(".radius").on('mouseover', function(datapoint) {
+			d3.select(this)
+				.style("fill", d3.rgb("red").darker());
+			return tip.show(datapoint);
+		}).on('mouseout', function(datapoint) {
+			d3.select(this)
+				.style("fill", "red");
+			return tip.hide(datapoint);
+		});
 	}
 
 	return update;
