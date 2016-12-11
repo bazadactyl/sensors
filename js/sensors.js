@@ -23,7 +23,7 @@ function selectAlgorithm() {
 
   if (document.getElementById("rigid").checked) {
     algorithm = Object.create(rigidCoverageAlgorithm);
-  } else if (document.getElementById("simple".checked)) {
+  } else if (document.getElementById("simple").checked) {
     algorithm = Object.create(simpleCoverageAlgorithm);
   }
 
@@ -51,9 +51,9 @@ var runSimulation = function() {
 
   for (i = 0; i < numberOfSensors; i++) {
     var randomStartPosition = Math.random();
-    nodes[i] = createNode(radius, randomStartPosition);
+    nodes.push(createNode(radius, randomStartPosition));
   }
- 
+
   runAlgorithm(nodes, view);
 }
 
