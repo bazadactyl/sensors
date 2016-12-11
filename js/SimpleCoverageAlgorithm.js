@@ -18,11 +18,11 @@ var simpleCoverageAlgorithm = {
     }  // else: we overlap or the radius or the gap is perfectly covered.
 
     if (p < nodes.lenght) {
-      setTimeout(function(v) {
+      setTimeout(function() {
         simpleCoverageAlgorithm.moveRight(nodes, p++, v);
-      }(view), view.delay);
+      }, view.delay);
     } else {
-      simpleCoverageAlgorithm.checkRight(nodes);
+      simpleCoverageAlgorithm.checkRight(nodes, view);
     }
   },
   moveLeft: function (nodes, p, view) {
@@ -34,9 +34,9 @@ var simpleCoverageAlgorithm = {
       simpleCoverageAlgorithm.update(view, movement, nodes);
 
       if (p > 0) {
-        setTimeout(function(v) {
-          simpleCoverageAlgorithm.moveLeft(nodes, p--, v);
-        }(view), view.delay);
+        setTimeout(function() {
+          simpleCoverageAlgorithm.moveLeft(nodes, p--, view);
+        }, view.delay);
       }
       // as soon as there is no gap, we are good as the first pass covered everything
     }
@@ -49,9 +49,9 @@ var simpleCoverageAlgorithm = {
       nodes[nodes.length -1].x =  nodes[nodes.length -1].x + movement;
       simpleCoverageAlgorithm.update(view, movement, nodes);
 
-      setTimeout(function(v) {
-        simpleCoverageAlgorithm.moveLeft(nodes, nodes.length - 2, v);
-      }(view), view.delay);
+      setTimeout(function() {
+        simpleCoverageAlgorithm.moveLeft(nodes, nodes.length - 2, view);
+      }, view.delay);
     } // we only move left if the need to shift to cover the right bound
   },
   checkLeft: function(nodes, view){
@@ -62,14 +62,14 @@ var simpleCoverageAlgorithm = {
       simpleCoverageAlgorithm.update(view, movement, nodes);
       // update the view
     }
-    setTimeout(function(v) {
-      simpleCoverageAlgorithm.moveRight(nodes, 1, v);
-    }(view), view.delay);
+    setTimeout(function() {
+      simpleCoverageAlgorithm.moveRight(nodes, 1, view);
+    }, view.delay);
 
   },
   update: function(view, movement, nodes) {
     view.movement.innerHTML = parseFloat(view.movement.innerHTML) + movement;
-    console.log(view.movement.innerHtml);
+    console.log(view.movement.innerHTML);
     view.update(nodes);
   }
 
