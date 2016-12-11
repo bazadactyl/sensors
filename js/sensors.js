@@ -56,7 +56,8 @@ var runSimulation = function() {
       movement: movementCounter,
       delay: 1000,
       update: function(){},
-      log: logList
+      log: logList,
+      isSimulation: false
     };
   for (i = 0; i < numberOfSensors; i++) {
     var randomStartPosition = Math.random();

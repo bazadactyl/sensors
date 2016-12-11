@@ -53,29 +53,34 @@ var rigidCoverageAlgorithm = {
     var previousNode = nodeList[currentNodeIndex - 1];
     var currentNode = nodeList[currentNodeIndex];
     var endOfUnitInterval = 1;
+    var movement;
 
     if (currentNodeIndex === 0) {
-      this.placeFirstNode(nodeList, view);
+      var node = nodeList[0];
+      movement = Math.abs(node.radius - node.x);
+      view.movement.innerHTML = parseFloat(view.movement.innerHTML) + movement;
+      node.x = node.radius;
     } else {
       // Case: the previous node covers to the end of the unit interval
       if (previousNode.rightBoundary() >= endOfUnitInterval) {
-        var movement = (1 - currentNode.x);
+        movement = (1 - currentNode.x);
         view.movement.innerHTML = parseFloat(view.movement.innerHTML) + movement;
-        rigidCoverageAlgorithm.updateLog(view, movement, nodeList, currentNodeIndex);
         // We stack remaining nodes at the end of the unit interval
         currentNode.x = endOfUnitInterval;
       } else {
         var newPosition = previousNode.rightBoundary() + currentNode.radius;
-        var movement = Math.abs(newPosition - currentNode.x);
+        movement = Math.abs(newPosition - currentNode.x);
         view.movement.innerHTML = parseFloat(view.movement.innerHTML) + movement;
-        rigidCoverageAlgorithm.updateLog(view, movement, nodeList, currentNodeIndex);
 
         // Move node to edge of the previous node's sensor
         currentNode.x = newPosition;
       }
     }
     // Update graph
-    view.update(nodeList);
+    if (!view.isSimulation) {
+      rigidCoverageAlgorithm.updateLog(view, movement, nodeList, currentNodeIndex);
+      view.update(nodeList);
+    }
 
     currentNodeIndex += 1;
 
@@ -86,20 +91,6 @@ var rigidCoverageAlgorithm = {
     }
   },
 
-  /**
-   * Places the first node at radius distance away from
-   * the start of the unit interval.
-   *
-   * @param  {NodeObject} node The first node in the unit interval.
-   * @return {Void}
-   */
-  placeFirstNode : function(nodeList, view) {
-    var node = nodeList[0];
-    var movement = Math.abs(node.radius - node.x);
-    view.movement.innerHTML = parseFloat(view.movement.innerHTML) + movement;
-    rigidCoverageAlgorithm.updateLog(view, movement, nodeList, 0);
-    node.x = node.radius;
-  },
   /**
    * Places the first node at radius distance away from
    * the start of the unit interval.
