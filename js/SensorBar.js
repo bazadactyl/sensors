@@ -11,24 +11,11 @@ function createSensorBar(config) {
 		.range(config.colors);
 
 	// set chart dimensions
-<<<<<<< HEAD
-	var margin = {
-			top: 50,
-			right: 30,
-			bottom: 60,
-			left: 55
-		};
-//	var width = document.getElementById(config.chartid).offsetWidth - margin.left - margin.right;
-//	var height = document.getElementById(config.chartid).offsetHeight - margin.top - margin.bottom;
-	width = 800;
-	height = 400;
-=======
 	var margin = { top: 50,	right: 30, bottom: 60, left: 55 };
 	// var width = document.getElementById(config.chartid).offsetWidth - margin.left - margin.right;
 	// var height = document.getElementById(config.chartid).offsetHeight - margin.top - margin.bottom;
 	var width = 800;
 	var height = 400;
->>>>>>> a207ce35cf12d9738e1568a63207c41405eaf957
 
 	// set X-scale
 	var x = d3.scaleLinear().range([0, width]);
