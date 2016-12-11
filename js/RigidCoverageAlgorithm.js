@@ -55,16 +55,21 @@ var rigidCoverageAlgorithm = {
     var endOfUnitInterval = 1;
 
     if (currentNodeIndex === 0) {
-      this.placeFirstNode(nodeList[0], view);
+      this.placeFirstNode(nodeList, view);
     } else {
       // Case: the previous node covers to the end of the unit interval
       if (previousNode.rightBoundary() >= endOfUnitInterval) {
-        view.movement.innerHTML = parseFloat(view.movement.innerHTML) + (1 - currentNode.x);
+        var movement = (1 - currentNode.x);
+        view.movement.innerHTML = parseFloat(view.movement.innerHTML) + movement;
+        rigidCoverageAlgorithm.updateLog(view, movement, nodeList, currentNodeIndex);
         // We stack remaining nodes at the end of the unit interval
         currentNode.x = endOfUnitInterval;
       } else {
         var newPosition = previousNode.rightBoundary() + currentNode.radius;
-        view.movement.innerHTML = parseFloat(view.movement.innerHTML) + Math.abs(newPosition - currentNode.x);
+        var movement = Math.abs(newPosition - currentNode.x);
+        view.movement.innerHTML = parseFloat(view.movement.innerHTML) + movement;
+        rigidCoverageAlgorithm.updateLog(view, movement, nodeList, currentNodeIndex);
+
         // Move node to edge of the previous node's sensor
         currentNode.x = newPosition;
       }
@@ -88,8 +93,31 @@ var rigidCoverageAlgorithm = {
    * @param  {NodeObject} node The first node in the unit interval.
    * @return {Void}
    */
-  placeFirstNode : function(node, view) {
-    view.movement.innerHTML = parseFloat(view.movement.innerHTML) + Math.abs(node.radius - node.x);
+  placeFirstNode : function(nodeList, view) {
+    var node = nodeList[0];
+    var movement = Math.abs(node.radius - node.x);
+    view.movement.innerHTML = parseFloat(view.movement.innerHTML) + movement;
+    rigidCoverageAlgorithm.updateLog(view, movement, nodeList, 0);
     node.x = node.radius;
+  },
+  /**
+   * Places the first node at radius distance away from
+   * the start of the unit interval.
+   *
+   * @param  {View} view The first node in the unit interval.
+   * @param  {int} movement The amount the node moved
+   * @param  {array} nodes The amount the node moved
+   * @return {Void}
+   */
+  updateLog : function (view, movement, nodes, pos) {
+    var originalTotal = parseFloat(view.movement.innerHTML);
+    view.movement.innerHTML = originalTotal + movement;
+    var logInfo = "\n Node Id: " + nodes[pos].id
+    + "\n moved to position: " + nodes[pos].x + "\n"
+    + "The node displaced a distance of " + movement + "\n"
+    + "Total distance moved = " + (originalTotal + movement) + "\n";
+    var entry = document.createElement('li');
+    entry.appendChild(document.createTextNode(logInfo));
+    view.log.appendChild(entry);
   }
 }
