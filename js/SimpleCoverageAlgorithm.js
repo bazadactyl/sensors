@@ -67,16 +67,16 @@ var simpleCoverageAlgorithm = {
     }, view.delay);
 
   },
-  update: function(view, movement, nodes, pos, startPos) {
+  update: function(view, movement, nodes, pos) {
     var originalTotal = parseFloat(view.movement.innerHTML);
     view.movement.innerHTML = originalTotal + movement;
-    var logInfo = "Node Id: " + nodes[pos].id
-    + " moved to position: " + nodes[pos].x + "\n"
+    var logInfo = "\n Node Id: " + nodes[pos].id
+    + "\n moved to position: " + nodes[pos].x + "\n"
     + "The node displaced a distance of " + movement + "\n"
     + "Total distance moved = " + (originalTotal + movement) + "\n";
     var entry = document.createElement('li');
     entry.appendChild(document.createTextNode(logInfo));
-    console.log(view.movement.innerHTML);
+    view.log.appendChild(entry);
     view.update(nodes);
   }
 };
