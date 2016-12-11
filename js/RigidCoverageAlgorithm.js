@@ -40,8 +40,11 @@ var rigidCoverageAlgorithm = {
    * @return {Void}
    */
   doCoverage : function (nodeList, view) {
-    this.placeFirstNode(nodeList[0], view);
-    this.coverageIteration(nodeList, view, 1);
+    view.update(nodeList);
+
+    setTimeout(function() {
+      rigidCoverageAlgorithm.coverageIteration(nodeList, view, 0);
+    }, view.delay);
   },
 
   coverageIteration : function(nodeList, view, currentNodeIndex) {
@@ -49,16 +52,20 @@ var rigidCoverageAlgorithm = {
     var currentNode = nodeList[currentNodeIndex];
     var endOfUnitInterval = 1;
 
-    // Case: the previous node covers to the end of the unit interval
-    if (previousNode.rightBoundary() >= endOfUnitInterval) {
-      view.movement.innerHTML = parseFloat(view.movement.innerHTML) + (1 - currentNode.x);
-      // We stack remaining nodes at the end of the unit interval
-      currentNode.x = endOfUnitInterval;
+    if (currentNodeIndex === 0) {
+      this.placeFirstNode(nodeList[0], view);
     } else {
-      var newPosition = previousNode.rightBoundary() + currentNode.radius;
-      view.movement.innerHTML = parseFloat(view.movement.innerHTML) + Math.abs(newPosition - currentNode.x);
-      // Move node to edge of the previous node's sensor
-      currentNode.x = newPosition;
+      // Case: the previous node covers to the end of the unit interval
+      if (previousNode.rightBoundary() >= endOfUnitInterval) {
+        view.movement.innerHTML = parseFloat(view.movement.innerHTML) + (1 - currentNode.x);
+        // We stack remaining nodes at the end of the unit interval
+        currentNode.x = endOfUnitInterval;
+      } else {
+        var newPosition = previousNode.rightBoundary() + currentNode.radius;
+        view.movement.innerHTML = parseFloat(view.movement.innerHTML) + Math.abs(newPosition - currentNode.x);
+        // Move node to edge of the previous node's sensor
+        currentNode.x = newPosition;
+      }
     }
     // Update graph
     view.update(nodeList);
