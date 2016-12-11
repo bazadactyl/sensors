@@ -66,9 +66,9 @@ var rigidCoverageAlgorithm = {
     currentNodeIndex += 1;
 
     if (currentNodeIndex < nodeList.length) {
-      setTimeout(function(view) {
+      setTimeout(function() {
         rigidCoverageAlgorithm.coverageIteration(nodeList, view, currentNodeIndex);
-      }(view), view.delay);
+      }, view.delay);
     }
   },
 
