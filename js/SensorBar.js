@@ -1,12 +1,7 @@
 function createSensorBar(config) {
-	// set chart settings
-	var barPadding = 0.9; // 90% bar, 10% padding
-	// var tickFormat = d3.format("d");
-	var minDotRadius = 3.0;
-	var maxDotRadius = 5.0;
-
-	// set animation settings
+	// constants
 	var duration = 800;
+	var sensorRadius = 5
 
 	// track hidden data
 	var hidden = [];
@@ -24,22 +19,12 @@ function createSensorBar(config) {
 		};
 	var width = document.getElementById(config.chartid).offsetWidth - margin.left - margin.right;
 	var height = document.getElementById(config.chartid).offsetHeight - margin.top - margin.bottom;
-	width = 600;
-	height = 600;
+	width = 800;
+	height = 400;
 
 	// set X-scale
-	var x = d3.scaleLinear()
-		.range([0, width]);
-
-	// set Y-scale
-	var y = d3.scaleLinear()
-		.rangeRound([height, 0]);
-
-	// create X-axis
+	var x = d3.scaleLinear().range([0, width]);
 	var xAxis = d3.axisBottom(x);
-
-	// create Y-axis
-	var yAxis = d3.axisLeft(y);
 
 	// configure the tooltip based on the data
 	var tip = d3.tip()
@@ -60,11 +45,6 @@ function createSensorBar(config) {
 	  .append("g")
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-	// draw chart title
-	chart.append('text')
-		.attr('class', 'chart-title')
-		.text(config.chartTitle || 'My Beautiful Chart');
-
 	// add tooltips to the chart
 	chart.call(tip);
 
@@ -72,72 +52,28 @@ function createSensorBar(config) {
 	chart.append("g")
 		.attr("class", "x axis");
 
-	// draw the Y-axis on the left of the chart (with a label)
-	chart.append("g")
-		.attr("class", "y axis")
-	  .append("text")
-		.attr('class', 'label');
-
 	var update = function(data) {
 
 		// update dimensions for the chart container in the DOM
-		width = document.getElementById(config.chartid).offsetWidth - margin.left - margin.right;
-		height = document.getElementById(config.chartid).offsetHeight - margin.top - margin.bottom;
+		// width = document.getElementById(config.chartid).offsetWidth - margin.left - margin.right;
+		// height = document.getElementById(config.chartid).offsetHeight - margin.top - margin.bottom;
 
 		// update chart size based changes to size of browser window
 		d3.select('#' + config.chartid + ' svg')
 			.attr("width", width + margin.left + margin.right)
 			.attr("height", height + margin.top + margin.bottom);
 
-		// deep copy the data array
-		var originalData = JSON.parse(JSON.stringify(data));
-
-		// sensor radius size
-		var sensorRadius = 5
-
 		// update the color scale
 		// color.domain(d3.keys(data[0]).filter(function(key) {
 		//     return key !== "date";
 		// }));
 
-		// add information used for binding and visualizing the data
-		// data.forEach(function(datapoint) {
-		//     datapoint.keys = color.domain().filter(function(key) {
-		//         if (hidden.indexOf(key) > -1) return false;
-		//         else return true;
-		//     }).map(function(key) {
-		//         return {
-		//             date: datapoint.date,
-		//             key: key,
-		//             y: datapoint[key]
-		//         };
-		//     });
-		// });
-
 		// update scale domains based on the data
 		// x.domain(d3.extent(data, function(d) { return d.xpos; }));
 		x.domain([0, 1]);
-		y.domain([0, 0]);
-
-		// calculate width of each bar on the chart
-		var extraDays = 2; // compensate for the extra days added in the X domain
-		var barWidth = (width / (data.length + extraDays)) * barPadding;
 
 		// update scales (this allows for chart resizing when the window is resized)
 		x.range([0, width]);
-		y.rangeRound([height, 0]);
-
-		// decide on how many ticks to place on x-axis based data size
-		// if (dates.length < 12) {
-		//     xAxis.ticks(d3.time.day, 1); // ticks for each day
-		//     xAxis.tickFormat(d3.time.format('%a %-d'));
-		// } else if (dates.length < 150) {
-		//     xAxis.ticks(d3.time.sunday, 1); // ticks only for sundays
-		//     xAxis.tickFormat(d3.time.format('%m/%d'));
-		// } else {
-		//     xAxis.ticks(d3.time.month, 1); // ticks only for 1st of every month
-		//     xAxis.tickFormat(d3.time.format('%b'));
-		// }
 
 		// update chart title
 		chart.select('.chart-title')
@@ -147,20 +83,8 @@ function createSensorBar(config) {
 		chart.select(".x.axis")
 			.transition()
 			.duration(duration)
-			.attr("transform", "translate(0," + height + ")")
+			.attr("transform", "translate(0," + (height/2) + ")")
 			.call(xAxis);
-
-		// update y-axis
-		chart.select(".y.axis")
-			.transition()
-			.duration(duration)
-			.call(yAxis);
-
-		// update y-axis label
-		// FIXME This will never change across updates
-		chart.select(".y.axis .label")
-			// .attr('transform', d3.transform('translate(' + (-margin.left + 18) + ',' + height / 2 + ') rotate(-90)').toString())
-			.text(config.yAxisLabel);
 
 		// DATA JOIN
 		var sensors = chart.selectAll(".sensor")
@@ -181,7 +105,7 @@ function createSensorBar(config) {
 		  .transition()
 			.duration(duration)
 			.attr("cx", function(d) { return x(d.x); })
-			.attr('cy', function(d) { return y(d.y); })
+			.attr('cy', function(d) { return (height/2); })
 			.attr('r',  function(d) { return x(d.radius); });
 
 		sensors.selectAll(".dot")
@@ -189,8 +113,8 @@ function createSensorBar(config) {
 		  .transition()
 			.duration(duration)
 			.attr('cx', function(d) { return x(d.x); })
-			.attr('cy', function(d) { console.log("UPDATE DOT" + " " + d.id); return y(d.y); })
-			.attr('r',  function(d) { return 5; });
+			.attr('cy', function(d) { console.log("UPDATE DOT" + " " + d.id); return (height/2); })
+			.attr('r',  function(d) { return sensorRadius; });
 
 		// ENTER new elements present in the data
 		sensors.enter().append("g")
@@ -199,7 +123,7 @@ function createSensorBar(config) {
 		chart.selectAll(".sensor.new").append('circle')
 			.attr('class', 'radius')
 			.attr("cx", function(d) { return x(d.x); })
-			.attr("cy", function(d) { return y(d.y); })
+			.attr("cy", function(d) { return (height/2); })
 			.attr("r",  function(d) { return x(d.radius); })
 			.style('fill', "red")
 			.style("opacity", 0.3);
@@ -207,15 +131,36 @@ function createSensorBar(config) {
 		chart.selectAll(".sensor.new").append('circle')
 			.attr('class', 'dot')
 			.attr("cx", function(d) { return x(d.x); })
-			.attr("cy", function(d) { console.log("ENTER DOT" + " " + d.id); return y(d.y); })
-			.attr("r",  function(d) { return 5; })
+			.attr("cy", function(d) { console.log("ENTER DOT" + " " + d.id); return (height/2); })
+			.attr("r",  function(d) { return sensorRadius; })
 			.style('fill', "steelblue")
 			.style("opacity", 1.0);
 
-		/**********************
-		 * INTERACTIVITY HERE *
-		 **********************/
-
+		// // refresh mouse event listeners
+		// dot.on('mouseover', function(datapoint) {
+		// 	d3.select(this)
+		// 		.style("fill", d3.rgb(color(datapoint.key)).darker())
+		// 	    .attr('r', dotRadius * 1.50);
+		// 	return tip.show(datapoint);
+		// }).on('mouseout', function(datapoint) {
+		// 	d3.select(this)
+		// 		.style("fill", color(datapoint.key))
+		// 	    .attr('r', dotRadius);
+		// 	return tip.hide(datapoint);
+		// });
+		//
+		// // refresh mouse event listeners
+		// dot.on('mouseover', function(datapoint) {
+		// 	d3.select(this)
+		// 		.style("fill", d3.rgb(color(datapoint.key)).darker())
+		// 	    .attr('r', dotRadius * 1.50);
+		// 	return tip.show(datapoint);
+		// }).on('mouseout', function(datapoint) {
+		// 	d3.select(this)
+		// 		.style("fill", color(datapoint.key))
+		// 	    .attr('r', dotRadius);
+		// 	return tip.hide(datapoint);
+		// });
 	}
 
 	return update;
