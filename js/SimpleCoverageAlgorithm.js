@@ -7,12 +7,18 @@ var simpleCoverageAlgorithm = {
 
     if(!view.isSimulation) {
       view.update(nodes);
+    } else {
+      simpleCoverageAlgorithm.updateMovements(view, movement);
     }
 
     // starts the process
-  setTimeout(function() {
+  if (!view.isSimulation) {
+    setTimeout(function() {
+      simpleCoverageAlgorithm.checkLeft(nodes, view);
+    }, view.delay);
+  } else {
     simpleCoverageAlgorithm.checkLeft(nodes, view);
-  }, view.delay);
+  }
 
 
   },
@@ -24,13 +30,20 @@ var simpleCoverageAlgorithm = {
       nodes[p].x = nodes[p].x - movement;
       if (! view.isSimulation) {
         simpleCoverageAlgorithm.update(view, movement, nodes, p);
+      } else {
+        simpleCoverageAlgorithm.updateMovements(view, movement);
       }
     }  // else: we overlap or the radius or the gap is perfectly covered.
 
     if (p < nodes.length - 1) {
-      setTimeout(function() {
+
+      if (!view.isSimulation){
+        setTimeout(function() {
+          simpleCoverageAlgorithm.moveRight(nodes, p+1, view);
+        }, view.delay);
+      } else {
         simpleCoverageAlgorithm.moveRight(nodes, p+1, view);
-      }, view.delay);
+      }
     } else {
       simpleCoverageAlgorithm.checkRight(nodes, view);
     }
@@ -43,11 +56,17 @@ var simpleCoverageAlgorithm = {
       nodes[p].x = nodes[p].x + movement;
       if (!view.isSimulation) {
         simpleCoverageAlgorithm.update(view, movement, nodes, p);
+      } else {
+        simpleCoverageAlgorithm.updateMovements(view, movement);
       }
       if (p > 0) {
-        setTimeout(function() {
+        if (!view.isSimulation){
+          setTimeout(function() {
+            simpleCoverageAlgorithm.moveLeft(nodes, --p, view);
+          }, view.delay);
+        } else {
           simpleCoverageAlgorithm.moveLeft(nodes, --p, view);
-        }, view.delay);
+        }
       }
       // as soon as there is no gap, we are good as the first pass covered everything
     }
@@ -60,10 +79,16 @@ var simpleCoverageAlgorithm = {
       nodes[nodes.length -1].x =  nodes[nodes.length -1].x + movement;
       if (!view.isSimulation) {
         simpleCoverageAlgorithm.update(view, movement, nodes, nodes.length - 1);
+      } else {
+        simpleCoverageAlgorithm.updateMovements(view, movement);
       }
-      setTimeout(function() {
+      if (!view.isSimulation) {
+        setTimeout(function() {
+          simpleCoverageAlgorithm.moveLeft(nodes, nodes.length - 2, view);
+        }, view.delay);
+      } else {
         simpleCoverageAlgorithm.moveLeft(nodes, nodes.length - 2, view);
-      }, view.delay);
+      }
     } // we only move left if the need to shift to cover the right bound
   },
   checkLeft: function(nodes, view){
@@ -71,17 +96,25 @@ var simpleCoverageAlgorithm = {
     if (nodes[0].x - radius > 0) {
       var movement = (nodes[0].x - radius);
       nodes[0].x = nodes[0].x - movement; // allign it with 0
+      if (!view.isSimulation){
       simpleCoverageAlgorithm.update(view, movement, nodes, 0);
+    } else {
+      simpleCoverageAlgorithm.updateMovements(view, movement);
+    }
       // update the view
     }
-    setTimeout(function() {
-      simpleCoverageAlgorithm.moveRight(nodes, 1, view);
-    }, view.delay);
+    if (!view.isSimulation){
+      setTimeout(function() {
+        simpleCoverageAlgorithm.moveRight(nodes, 1, view);
+      }, view.delay);
+    } else {
+        simpleCoverageAlgorithm.moveRight(nodes, 1, view);
+    }
 
   },
   update: function(view, movement, nodes, pos) {
     var originalTotal = parseFloat(view.movement.innerHTML);
-    view.movement.innerHTML = originalTotal + movement;
+    simpleCoverageAlgorithm.updateMovements(view, movement);
     var logInfo = "\n Node Id: " + nodes[pos].id
     + "\n moved to position: " + nodes[pos].x + "\n"
     + "The node displaced a distance of " + movement + "\n"
@@ -90,5 +123,9 @@ var simpleCoverageAlgorithm = {
     entry.appendChild(document.createTextNode(logInfo));
     view.log.appendChild(entry);
     view.update(nodes);
+  },
+  updateMovements: function(view, movement) {
+    var originalTotal = parseFloat(view.movement.innerHTML);
+    view.movement.innerHTML = originalTotal + movement;
   }
 };
