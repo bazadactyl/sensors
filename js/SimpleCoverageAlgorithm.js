@@ -8,7 +8,7 @@ var simpleCoverageAlgorithm = {
     if(!view.isSimulation) {
       view.update(nodes);
     } else {
-      simpleCoverageAlgorithm.updateMovements(view, movement);
+      simpleCoverageAlgorithm.updateMovements(view, 0);
     }
 
     // starts the process
