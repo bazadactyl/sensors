@@ -41,8 +41,8 @@ function createSensorBar(config) {
 
 		// set sensor radius, making sure the sensor is always smaller than its radius
 		var normalRadius = 8
-		var scaledRadius = x(data[0].radius) / 4;
-		var sensorRadius = Math.min(desireRadius, scaledRadius);
+		var scaledRadius = x(d3.min(data, function(d) { return d.radius; })) / 4;
+		var sensorRadius = Math.min(normalRadius, scaledRadius);
 
 		// update chart size based changes to size of browser window
 		d3.select('#' + config.chartid + ' svg')
@@ -108,7 +108,7 @@ function createSensorBar(config) {
 
 		chart.selectAll(".sensor.new").append('circle')
 			.attr('class', 'dot')
-			.attr("cx", function(d) { console.log(d3.interpolateRainbow(d.x)); return x(d.x); })
+			.attr("cx", function(d) { return x(d.x); })
 			.attr("cy", function(d) { return (height/2); })
 			.attr("r",  function(d) { return sensorRadius; })
 			.attr('stroke', 'black')
