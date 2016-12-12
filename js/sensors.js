@@ -34,6 +34,16 @@ function selectAlgorithm() {
   return algorithm;
 }
 
+/**
+ * Initializes a list of sensor nodes
+ * placing them randomly in the [0, 1)
+ * unit interval.
+ *
+ * @param  {Integer numberOfNodes The number of sensors to place
+ * @param  {[Object]} nodes       The list of sensor nodes
+ * @param  {Float} radius         The radius of the sensor nodes
+ * @return {Void}
+ */
 function initializeNodeList(numberOfNodes, nodes, radius) {
   for (i = 0; i < numberOfNodes; i++) {
     var randomStartPosition = Math.random();
@@ -41,6 +51,10 @@ function initializeNodeList(numberOfNodes, nodes, radius) {
   }
 }
 
+/**
+ * Clears the data in the UI form fields, log output
+ * and in the UI graphs
+ */
 var resetSimulation = function() {
   console.log("reset");
   document.getElementById("radius").value = 0;
@@ -54,6 +68,17 @@ var resetSimulation = function() {
   trialGraph([]);
 }
 
+/**
+ * Runs the algorithm simulations over 20 trials
+ * at various radius lengths.
+ *
+ * Radius lengths go from 0.01->1, incremented by
+ * 0.01 at each iteration.
+ *
+ * Places the data in a graph on the UI.
+ *
+ * @return {Void}
+ */
 var runGraphSimulation = function() {
   console.log("Running 20 trials at various radius's");
   var numberOfSensors = document.getElementById("num_of_sensors").value;
@@ -66,16 +91,33 @@ var runGraphSimulation = function() {
       isSimulation: true
     };
 
+  // Create the graph if not done already
   if (trialGraph === undefined) {
     trialGraph = drawLineChart(radiusData);
   }
   view.update = trialGraph;
 
+  // Begin running simulations
   setTimeout(function() {
     graphIteration(0.01, view, 0, radiusData, numberOfSensors);
   }, 0);
 }
 
+/**
+ * An iteration of the graph simulation.
+ * At each call, does 20 trials of an algorithm
+ * run on a set of nodes with a particular sensor
+ * radius. Averages the sum of distances travelled
+ * by the number of trials, then places the data in
+ * an array to be given as graph input data.
+ *
+ * @param  {Float}    currentRadius   The current sensor radius
+ * @param  {Object}   view            The view object we are looking at
+ * @param  {Integer}  currentLoop     The current recursive iteration
+ * @param  {Array}    radiusData      The list of graph input data
+ * @param  {Integer}  numberOfSensors The number of sensors in our simulation
+ * @return {Void}
+ */
 function graphIteration(currentRadius, view, currentLoop, radiusData, numberOfSensors) {
   var maxRadius = 1;
   var trials = 20;
@@ -108,6 +150,15 @@ function graphIteration(currentRadius, view, currentLoop, radiusData, numberOfSe
   }
 }
 
+/**
+ * Runs the node sensor bar simulation.
+ * Generates a number of sensors randomly placed
+ * in the unit interval [0.1), and runs a certain
+ * algorithm on them in order to fully cover the
+ * unit interval by the range of the sensors.
+ *
+ * @return {Void}
+ */
 var runSimulation = function() {
   console.log("run simulation");
   var radius = parseFloat(document.getElementById("radius").value);
@@ -135,7 +186,15 @@ var runSimulation = function() {
   runAlgorithm(nodes, view);
 }
 
-
+/**
+ * Pulls the algorithm selection
+ * from the radio buttons on the UI
+ * and executes the selected algorithm.
+ *
+ * @param  {Array}  nodes  The array of nodes.
+ * @param  {Object} view   The view object.
+ * @return {Void}
+ */
 var runAlgorithm = function(nodes, view) {
   // render graphic
   // start the algo
@@ -144,6 +203,13 @@ var runAlgorithm = function(nodes, view) {
   algorithm.execute(nodes, view);
 }
 
+/**
+ * Draws the sensor bar for use with the
+ * sensor bar animation.
+ *
+ * @param  {Array}  nodes The list of nodes we are animating.
+ * @return {Function}     A function that updates the node data.
+ */
 function drawSensorBar(nodes) {
     var updateSensorBar = createSensorBar({
         chartid: "sensor-bar",
@@ -155,6 +221,13 @@ function drawSensorBar(nodes) {
     return updateSensorBar;
 }
 
+/**
+ * Draws the graph for use with the sensor
+ * trial simulation.
+ *
+ * @param  {Array}  radiusData The array of radius data.
+ * @return {Function}          A function that updates the radius data.
+ */
 function drawLineChart(radiusData) {
     var updateLineChart = createLineChart({
         chartid: "line-chart",

@@ -41,6 +41,7 @@ var rigidCoverageAlgorithm = {
    */
   doCoverage : function (nodeList, view) {
     if (nodeList.length > 0) {
+      // Only set timeout for the sensorbar animation
       if (!view.isSimulation) {
         view.update(nodeList);
         setTimeout(function() {
@@ -52,6 +53,18 @@ var rigidCoverageAlgorithm = {
     }
   },
 
+  /**
+   * A single iteration of the Rigid Coverage algorithm.
+   * Places nodes at the maximum sensor proximity of the
+   * previous node. If the entire unit interval is already
+   * covered, places the rest of the nodes at the end of the
+   * unit interval to minimize sensor overlap.
+   *
+   * @param  {[Object]} nodeList          The list of NodeObjects.
+   * @param  {Object}   view              The view object containing the graph.
+   * @param  {Integer}  currentNodeIndex  The current iteration of the recursion.
+   * @return {Void}
+   */
   coverageIteration : function(nodeList, view, currentNodeIndex) {
     var previousNode = nodeList[currentNodeIndex - 1];
     var currentNode = nodeList[currentNodeIndex];
@@ -59,6 +72,7 @@ var rigidCoverageAlgorithm = {
     var movement;
 
     if (currentNodeIndex === 0) {
+      // Sets the position of the first sensor
       var node = nodeList[0];
       movement = Math.abs(node.radius - node.x);
       view.movement.innerHTML = parseFloat(view.movement.innerHTML) + movement;
@@ -73,6 +87,7 @@ var rigidCoverageAlgorithm = {
       } else {
         var newPosition = previousNode.rightBoundary() + currentNode.radius;
 
+        // Case: This sensor will finish covering the interval, so place at end
         if (newPosition > endOfUnitInterval) { newPosition = endOfUnitInterval;}
 
         movement = Math.abs(newPosition - currentNode.x);
@@ -82,7 +97,7 @@ var rigidCoverageAlgorithm = {
         currentNode.x = newPosition;
       }
     }
-    // Update graph
+    // Update graph only if not a simulation
     if (!view.isSimulation) {
       rigidCoverageAlgorithm.updateLog(view, movement, nodeList, currentNodeIndex);
       view.update(nodeList);
@@ -104,12 +119,12 @@ var rigidCoverageAlgorithm = {
   },
 
   /**
-   * Places the first node at radius distance away from
-   * the start of the unit interval.
+   * Adds a log entry to the UI
    *
-   * @param  {View} view The first node in the unit interval.
-   * @param  {int} movement The amount the node moved
-   * @param  {array} nodes The amount the node moved
+   * @param  {Object} view     The view object
+   * @param  {Float} movement The distance of a sensor to be logged
+   * @param  {[Object]} nodes    The list of sensor nodes
+   * @param  {Integer} pos      The array index of the sensor node we moved
    * @return {Void}
    */
   updateLog : function (view, movement, nodes, pos) {
