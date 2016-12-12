@@ -1,26 +1,12 @@
 function createLineChart(config) {
-	// set chart settings
-	var barPadding = 0.9; // 90% bar, 10% padding
-	// var dateFormat = d3.time.format('%m/%d');
-	// var tickFormat = d3.format("d");
-	var minDotRadius = 3.0;
-	var maxDotRadius = 5.0;
 
 	// set animation settings
-	var duration = 800;
-
-	// track hidden data
-	var hidden = [];
-
-	// set color scale, and map each key to a color
-	var color = d3.scaleOrdinal()
-		.range(config.colors);
+	var dotRadius = 4;
+	var duration = 0;
 
 	// set chart dimensions
 	var margin = { top: 50, right: 30, bottom: 60, left: 55	};
-	// var width = document.getElementById(config.chartid).offsetWidth - margin.left - margin.right;
-	// var height = document.getElementById(config.chartid).offsetHeight - margin.top - margin.bottom;
-	var width = 600;
+	var width = 1000;
 	var height = 600;
 
 	// set scales and axes
@@ -36,8 +22,8 @@ function createLineChart(config) {
 		.html(function(datapoint) {
 			return '<table><thead><tr><td colspan="3">' + 'Algorithm' +
 				'</td></tr></thead><tbody><tr>' + '<td class="tip-radius">' + 'Radius: ' +
-				datapoint.radius + '</td></tr><tr><td class="tip-movement">' +
-				'Avg. Movement ' + datapoint.movement + '</td></tr></tbody></table>';
+				datapoint.radius.toFixed(5) + '</td></tr><tr><td class="tip-movement">' +
+				'Avg. Movement ' + datapoint.movement.toFixed(5) + '</td></tr></tbody></table>';
 		});
 
 	// add an svg element to contain the chart
@@ -47,11 +33,6 @@ function createLineChart(config) {
 		.attr("height", height + margin.top + margin.bottom)
 	  .append("g")
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-	// draw chart title
-	chart.append('text')
-		.attr('class', 'chart-title')
-		.text(config.chartTitle || 'My Beautiful Chart');
 
 	// add tooltips to the chart
 	chart.call(tip);
@@ -64,7 +45,13 @@ function createLineChart(config) {
 	chart.append("g")
 		.attr("class", "y axis")
 	  .append("text")
-		.attr('class', 'label');
+	  	.attr('class', 'label')
+	  	.attr('id', 'y-axis-label')
+      	.attr("transform", "rotate(-90)")
+      	.attr("y", 6)
+		.attr("dy", ".71em")
+		.style("text-anchor", "end")
+		.text("Average Movement");
 
 	// draw the line that goes through each datapoint on the chart
 	chart.append("path")
@@ -74,69 +61,12 @@ function createLineChart(config) {
 
 	var update = function(data) {
 
-		// update dimensions for the chart container in the DOM
-		// width = document.getElementById(config.chartid).offsetWidth - margin.left - margin.right;
-		// height = document.getElementById(config.chartid).offsetHeight - margin.top - margin.bottom;
-
-		// update chart size based changes to size of browser window
-		d3.select('#' + config.chartid + ' svg')
-			.attr("width", width + margin.left + margin.right)
-			.attr("height", height + margin.top + margin.bottom);
-
-		// deep copy the data array
-		// var originalData = JSON.parse(JSON.stringify(data));
-
-		// calculate radius of svg circles based on number of datapoint
-		var dotRadius = 5;
-		// dotRadius = d3.min([maxDotRadius, dotRadius]); // don't get too big
-		// dotRadius = d3.max([minDotRadius, dotRadius]); // don't get too small
-
-		// update the color scale
-		// color.domain(d3.keys(data[0]).filter(function(key) {
-		// 	return key !== "date";
-		// }));
-
-		// add information used for binding and visualizing the data
-		// data.forEach(function(datapoint) {
-		// 	datapoint.keys = color.domain().filter(function(key) {
-		// 		if (hidden.indexOf(key) > -1) return false;
-		// 		else return true;
-		// 	}).map(function(key) {
-		// 		return {
-		// 			date: datapoint.date,
-		// 			key: key,
-		// 			y: datapoint[key]
-		// 		};
-		// 	});
-		// });
-
-		// update scale domains based on the data
-		x.domain(d3.extent(data, function(d) { return d.radius; }));
+		// update scales and axes
+		x.domain([0, 1]);
 		y.domain(d3.extent(data, function(d) { return d.movement; }));
-
-		// calculate width of each bar on the chart
-		// var extraDays = 2; // compensate for the extra days added in the X domain
-		// var barWidth = (width / (data.length + extraDays)) * barPadding;
-
-		// update scales (this allows for chart resizing when the window is resized)
 		x.range([0, width]);
 		y.rangeRound([height, 0]);
-
-		// decide on how many ticks to place on x-axis based data size
-		// if (dates.length < 12) {
-		//     xAxis.ticks(d3.time.day, 1); // ticks for each day
-		//     xAxis.tickFormat(d3.time.format('%a %-d'));
-		// } else if (dates.length < 150) {
-		//     xAxis.ticks(d3.time.sunday, 1); // ticks only for sundays
-		//     xAxis.tickFormat(d3.time.format('%m/%d'));
-		// } else {
-		//     xAxis.ticks(d3.time.month, 1); // ticks only for 1st of every month
-		//     xAxis.tickFormat(d3.time.format('%b'));
-		// }
-
-		// update chart title
-		chart.select('.chart-title')
-			.attr('transform', 'translate(' + (width / 2) + ',' + (margin.top / -2.25) + ')');
+		xAxis.tickValues([0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
 
 		// update x-axis
 		chart.select(".x.axis")
@@ -149,13 +79,7 @@ function createLineChart(config) {
 		chart.select(".y.axis")
 			.transition()
 			.duration(duration)
-			.call(yAxis);
-
-		// update y-axis label
-		// FIXME This will never change across updates
-		// chart.select(".y.axis .label")
-		// 	// .attr('transform', d3.transform('translate(' + (-margin.left + 18) + ',' + height / 2 + ') rotate(-90)').toString())
-		// 	.text(config.yAxisLabel);
+		  	.call(yAxis);
 
 		// create the line that goes through each datapoint on the chart
 		var line = d3.line()
@@ -169,11 +93,7 @@ function createLineChart(config) {
 			.duration(duration)
 			.style('opacity', 1.0)
 			.attr("d", line)
-			.style("stroke", function(d) {
-				return "steelblue";
-			}); // TODO Fix this!
-
-		console.log(JSON.stringify(data));
+			.style("stroke", function(d) { return "steelblue"; });
 
 		// DATA JOIN
 		var points = chart.selectAll(".point")
@@ -193,9 +113,9 @@ function createLineChart(config) {
 			.data(data)
 		  .transition()
 		  	.duration(duration)
-			.attr('cx', function(d) { console.log("Update: " + JSON.stringify(d)); return x(d.radius); })
+			.attr('cx', function(d) { return x(d.radius);   })
 			.attr('cy', function(d) { return y(d.movement); })
-			.attr('r', function(d) { return dotRadius; })
+			.attr('r',  function(d) { return dotRadius;     })
 
 		// ENTER new elements present in the data
 		points.enter().append('g')
@@ -203,9 +123,9 @@ function createLineChart(config) {
 
 		chart.selectAll('.point.new').append('circle')
 			.attr('class', 'dot')
-			.attr('cx', function(d) { console.log("ENTER: " + JSON.stringify(d)); return x(d.radius); })
+			.attr('cx', function(d) { return x(d.radius);   })
 			.attr('cy', function(d) { return y(d.movement); })
-			.attr('r', function(d) { return dotRadius; })
+			.attr('r',  function(d) { return dotRadius;     })
 			.style('fill', 'steelblue')
 			.style('opacity', 1.0);
 
@@ -221,100 +141,6 @@ function createLineChart(config) {
 			    .attr('r', dotRadius);
 			return tip.hide(datapoint);
 		});
-
-		// legend settings
-		var squareWidth = 12;
-		var labelPadding = squareWidth + 4;
-
-		// add svg 'group' elements for each legend square + label
-		var legend = chart.selectAll(".legend")
-		    .data(color.domain().slice())
-		    .enter().append("g")
-		    .attr("class", "legend");
-
-		// draw the legend square
-		legend.append("rect")
-		    .attr('class', 'legend-icon')
-		    .attr("x", 0)
-		    .attr("width", squareWidth)
-		    .attr("height", squareWidth)
-		    .style("fill", color);
-
-		// draw the legend label
-		legend.append("text")
-		    .attr('class', 'legend-label')
-		    .text(function(d) {
-		        return d;
-		    })
-		    .attr("x", labelPadding)
-		    .attr("y", squareWidth / 2)
-		    .attr("dy", "0.35em");
-
-		// get the width of each label
-		var labelWidths = [0];
-		chart.selectAll(".legend text")
-		    .each(function(d) {
-		        labelWidths.push(this.getBBox().width);
-		        return labelPadding;
-		    });
-
-		// center the legend at the bottom of the chart
-		var prevX;
-		var remainingWhiteSpace = 0;
-		var leftLegendPadding = 0;
-		chart.selectAll('.legend').attr("x", function(d, i) {
-		        var prevLegendWidth = (squareWidth + labelPadding + labelWidths[i]);
-		        var xPosition = !prevX ? 1 : (prevX + prevLegendWidth);
-		        var yPosition = (height + margin.bottom / 2);
-		        prevX = xPosition;
-
-		        var currentLegendWidth = (squareWidth + labelPadding + labelWidths[i + 1]);
-		        remainingWhiteSpace = width - (prevX + currentLegendWidth);
-		        leftLegendPadding = remainingWhiteSpace / 2;
-
-		        return xPosition;
-		    })
-		    .attr("transform", function(d, i) {
-		        var paddedXPosition = +d3.select(this).attr('x') + leftLegendPadding;
-		        var yPosition = (height + margin.bottom / 2);
-
-		        return "translate(" + paddedXPosition + "," + yPosition + ")";
-		    });
-
-		// refresh the legend click handler
-		chart.selectAll('.legend')
-		    .on('click', function(d) {
-		        // check if this dataset is currectly hidden
-		        var index = hidden.indexOf(d);
-
-		        // if this dataset is the last one remaining, then show all datasets
-		        if (index < 0 && hidden.length + 1 == color.domain().length) {
-		            hidden = [];
-		            chart.selectAll('.legend').selectAll('rect').style('fill', function(d) {
-		                return color(d);
-		            });
-		            d3.select(this).select('rect').style('fill', color(d));
-
-		            // if this dataset is currently hidden, then show it
-		        } else if (index > -1) {
-		            hidden.splice(index, 1);
-		            d3.select(this).select('rect').style('fill', color(d));
-
-		            // otherwise, this dataset is not hidden, so hide it
-		        } else {
-		            hidden.push(d);
-		            d3.select(this).select('rect').style('fill', 'white');
-		        }
-		        update(originalData);
-		    })
-		    .on('dblclick', function(d) {
-		        chart.selectAll('.legend').selectAll('rect').style('fill', 'white');
-		        d3.select(this).select('rect').style('fill', color(d));
-
-		        hidden = color.domain();
-		        hidden.splice(hidden.indexOf(d), 1);
-		        update(originalData);
-		    });
 	}
 
 	return update;
