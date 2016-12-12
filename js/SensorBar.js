@@ -1,6 +1,6 @@
 function createSensorBar(config) {
 	// constants
-	var duration = 800;
+	var duration = 400;
 	var sensorRadius = 5
 
 	// track hidden data
