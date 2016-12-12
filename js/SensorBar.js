@@ -1,21 +1,12 @@
 function createSensorBar(config) {
 	// constants
 	var duration = 400;
-	var sensorRadius = 5
-
-	// track hidden data
-	var hidden = [];
-
-	// set color scale, and map each key to a color
-	var color = d3.scaleOrdinal()
-		.range(config.colors);
+	var sensorRadius = 8;
 
 	// set chart dimensions
 	var margin = { top: 50,	right: 30, bottom: 60, left: 55 };
-	// var width = document.getElementById(config.chartid).offsetWidth - margin.left - margin.right;
-	// var height = document.getElementById(config.chartid).offsetHeight - margin.top - margin.bottom;
 	var width = 800;
-	var height = 400;
+	var height = 300;
 
 	// set X-scale
 	var x = d3.scaleLinear().range([0, width]);
@@ -49,19 +40,13 @@ function createSensorBar(config) {
 
 	var update = function(data) {
 
-		// update dimensions for the chart container in the DOM
-		// width = document.getElementById(config.chartid).offsetWidth - margin.left - margin.right;
-		// height = document.getElementById(config.chartid).offsetHeight - margin.top - margin.bottom;
-
 		// update chart size based changes to size of browser window
 		d3.select('#' + config.chartid + ' svg')
 			.attr("width", width + margin.left + margin.right)
 			.attr("height", height + margin.top + margin.bottom);
 
-		// update scale domains based on the data
+		// update scales
 		x.domain([0, 1]);
-
-		// update scales (this allows for chart resizing when the window is resized)
 		x.range([0, width]);
 
 		// update chart title
@@ -122,6 +107,8 @@ function createSensorBar(config) {
 			.attr("cx", function(d) { console.log(d3.interpolateRainbow(d.x)); return x(d.x); })
 			.attr("cy", function(d) { return (height/2); })
 			.attr("r",  function(d) { return sensorRadius; })
+			.attr('stroke', 'black')
+			.attr('stroke-width', 2)
 			.style('fill', function(d) { return d3.interpolateViridis(d.id / data.length); })
 			.style("opacity", 1.0);
 

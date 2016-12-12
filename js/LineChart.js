@@ -2,7 +2,7 @@ function createLineChart(config) {
 
 	// set animation settings
 	var dotRadius = 4;
-	var duration = 0;
+	var duration = 50;
 
 	// set chart dimensions
 	var margin = { top: 50, right: 30, bottom: 60, left: 55	};
