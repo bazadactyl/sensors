@@ -1,7 +1,6 @@
 function createSensorBar(config) {
 	// constants
 	var duration = 400;
-	var sensorRadius = 8;
 
 	// set chart dimensions
 	var margin = { top: 50,	right: 30, bottom: 60, left: 55 };
@@ -39,6 +38,11 @@ function createSensorBar(config) {
 		.attr("class", "x axis");
 
 	var update = function(data) {
+
+		// set sensor radius, making sure the sensor is always smaller than its radius
+		var normalRadius = 8
+		var scaledRadius = x(data[0].radius) / 4;
+		var sensorRadius = Math.min(desireRadius, scaledRadius);
 
 		// update chart size based changes to size of browser window
 		d3.select('#' + config.chartid + ' svg')
