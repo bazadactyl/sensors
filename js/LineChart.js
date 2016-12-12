@@ -22,7 +22,7 @@ function createLineChart(config) {
 		.html(function(datapoint) {
 			return '<table><thead><tr><td colspan="3">' + 'Algorithm' +
 				'</td></tr></thead><tbody><tr>' + '<td class="tip-radius">' + 'Radius: ' +
-				datapoint.radius.toFixed(5) + '</td></tr><tr><td class="tip-movement">' +
+				datapoint.radius.toFixed(2) + '</td></tr><tr><td class="tip-movement">' +
 				'Avg. Movement ' + datapoint.movement.toFixed(5) + '</td></tr></tbody></table>';
 		});
 
