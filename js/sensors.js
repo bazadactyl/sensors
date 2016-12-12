@@ -123,7 +123,7 @@ function graphIteration(currentRadius, view, currentLoop, radiusData, numberOfSe
   var trials = 20;
   var radiusIteration = 0.01;
 
-  if (currentRadius <= maxRadius) {
+  if (currentRadius <= (maxRadius + radiusIteration)) {
       var radiusSample = { "radius": 0, "movement": 0}
       var totalDistance = 0;
       radiusSample.radius = currentRadius;
