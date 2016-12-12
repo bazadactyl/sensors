@@ -37,7 +37,7 @@ var simpleCoverageAlgorithm = {
 
     if (p < nodes.length - 1) {
 
-      if (!view.isSimulation){
+      if (!view.isSimulation && movement){
         setTimeout(function() {
           simpleCoverageAlgorithm.moveRight(nodes, p+1, view);
         }, view.delay);
@@ -60,7 +60,7 @@ var simpleCoverageAlgorithm = {
         simpleCoverageAlgorithm.updateMovements(view, movement);
       }
       if (p > 0) {
-        if (!view.isSimulation){
+        if (!view.isSimulation && movement){
           setTimeout(function() {
             simpleCoverageAlgorithm.moveLeft(nodes, --p, view);
           }, view.delay);
@@ -82,7 +82,7 @@ var simpleCoverageAlgorithm = {
       } else {
         simpleCoverageAlgorithm.updateMovements(view, movement);
       }
-      if (!view.isSimulation) {
+      if (!view.isSimulation && movement) {
         setTimeout(function() {
           simpleCoverageAlgorithm.moveLeft(nodes, nodes.length - 2, view);
         }, view.delay);
@@ -96,14 +96,14 @@ var simpleCoverageAlgorithm = {
     if (nodes[0].x - radius > 0) {
       var movement = (nodes[0].x - radius);
       nodes[0].x = nodes[0].x - movement; // allign it with 0
-      if (!view.isSimulation){
+      if (!view.isSimulation || movement){
       simpleCoverageAlgorithm.update(view, movement, nodes, 0);
     } else {
       simpleCoverageAlgorithm.updateMovements(view, movement);
     }
       // update the view
     }
-    if (!view.isSimulation){
+    if (!view.isSimulation && movement){
       setTimeout(function() {
         simpleCoverageAlgorithm.moveRight(nodes, 1, view);
       }, view.delay);
