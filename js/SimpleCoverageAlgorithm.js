@@ -96,7 +96,7 @@ var simpleCoverageAlgorithm = {
     if (nodes[0].x - radius > 0) {
       var movement = (nodes[0].x - radius);
       nodes[0].x = nodes[0].x - movement; // allign it with 0
-      if (!view.isSimulation || movement){
+      if (!view.isSimulation && movement){
       simpleCoverageAlgorithm.update(view, movement, nodes, 0);
     } else {
       simpleCoverageAlgorithm.updateMovements(view, movement);
