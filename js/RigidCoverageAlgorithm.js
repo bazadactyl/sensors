@@ -41,11 +41,14 @@ var rigidCoverageAlgorithm = {
    */
   doCoverage : function (nodeList, view) {
     if (nodeList.length > 0) {
-      view.update(nodeList);
-
-      setTimeout(function() {
-        rigidCoverageAlgorithm.coverageIteration(nodeList, view, 0);
-      }, view.delay);
+      if (!view.isSimulation) {
+        view.update(nodeList);
+        setTimeout(function() {
+          rigidCoverageAlgorithm.coverageIteration(nodeList, view, 0);
+        }, view.delay);
+      } else {
+        this.coverageIteration(nodeList, view, 0);
+      }
     }
   },
 
@@ -69,6 +72,9 @@ var rigidCoverageAlgorithm = {
         currentNode.x = endOfUnitInterval;
       } else {
         var newPosition = previousNode.rightBoundary() + currentNode.radius;
+
+        if (newPosition > endOfUnitInterval) { newPosition = endOfUnitInterval;}
+
         movement = Math.abs(newPosition - currentNode.x);
         view.movement.innerHTML = parseFloat(view.movement.innerHTML) + movement;
 
@@ -85,9 +91,15 @@ var rigidCoverageAlgorithm = {
     currentNodeIndex += 1;
 
     if (currentNodeIndex < nodeList.length) {
-      setTimeout(function() {
-        rigidCoverageAlgorithm.coverageIteration(nodeList, view, currentNodeIndex);
-      }, view.delay);
+      if (!view.isSimulation) {
+        // Time the iteration if not a simulation
+        setTimeout(function() {
+          rigidCoverageAlgorithm.coverageIteration(nodeList, view, currentNodeIndex);
+        }, view.delay);
+      } else{
+        // Execute next iteration right away
+        this.coverageIteration(nodeList, view, currentNodeIndex);
+      }
     }
   },
 
