@@ -1,3 +1,15 @@
+/**
+ * LineChart
+ * ---------
+ *
+ * Provide the ability to create dynamic Line Chart elements.
+ * Calling this function sets up the Line Chart and returns a
+ * closure function that allows the user to update the Line
+ * Chart they've created.
+ *
+ * @author Basim Ramadhan
+ */
+
 function createLineChart(config) {
 
 	// set animation settings

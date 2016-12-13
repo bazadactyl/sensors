@@ -1,3 +1,15 @@
+/**
+ * SensorBar
+ * ---------
+ *
+ * Provide the ability to create dynamic Sensor Bar elements.
+ * Calling this function sets up the Sensor Bar and returns a
+ * closure function that allows the user to update the Sensor
+ * Bar they've created.
+ *
+ * @author Basim Ramadhan
+ */
+
 function createSensorBar(config) {
 	// constants
 	var duration = 400;
