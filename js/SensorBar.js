@@ -131,12 +131,10 @@ function createSensorBar(config) {
 		// refresh mouse event listeners on sensor dots
 		chart.selectAll(".dot").on('mouseover', function(datapoint) {
 			d3.select(this)
-				.style("fill", d3.rgb("steelblue").darker())
 			    .attr('r', sensorRadius * 1.50);
 			return tip.show(datapoint);
 		}).on('mouseout', function(datapoint) {
 			d3.select(this)
-				.style("fill", "steelblue")
 			    .attr('r', sensorRadius);
 			return tip.hide(datapoint);
 		});
