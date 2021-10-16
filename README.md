@@ -8,7 +8,7 @@ We used D3.js to draw an animated sensor bar that visualized the behavior of the
 
 Check out a demo video by clicking on the image of the sensor bar below:
 
-[![Sensor Bar](screenshots/sensor-bar.png)](screenshots/usage.mp4)
+[![Sensor Bar](screenshots/sensor-bar.png)](screenshots/usage.webm)
 
 ## Instructions
 
